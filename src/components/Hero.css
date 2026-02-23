@@ -1,0 +1,72 @@
+.hero-section {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.hero-spline-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    /* Allow interactions to reach Spline canvas */
+}
+
+.headshot-placeholder {
+    width: min(80vw, 500px);
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-primary) 100%);
+    border-radius: 50% 50% 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--color-text-secondary);
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+    border: 1px border-light;
+}
+
+.placeholder-text {
+    font-size: var(--font-size-small);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    opacity: 0.5;
+}
+
+.hero-text-left,
+.hero-text-right {
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.hero-text-right {
+    text-align: right;
+    align-items: flex-end;
+}
+
+.hero-line {
+    font-size: var(--font-size-display);
+    line-height: var(--line-height-display);
+    letter-spacing: var(--tracking-tight);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+}
+
+.hero-star {
+    font-size: 0.6em;
+    margin-right: 0.1em;
+    transform: translateY(-0.1em);
+    color: var(--color-text-primary);
+}

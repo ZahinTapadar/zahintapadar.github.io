@@ -1,0 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Core Palette */
+  --color-moss: #2E4036;
+  --color-clay: #CC5833;
+  --color-cream: #F2F0E9;
+  --color-charcoal: #1A1A1A;
+
+  /* Semantic Aliases */
+  --color-bg-primary: var(--color-cream);
+  --color-bg-dark: var(--color-charcoal);
+  --color-bg-card: #FFFFFF;
+  --color-bg-light: var(--color-cream);
+  --color-text-primary: var(--color-charcoal);
+  --color-text-light: var(--color-cream);
+  --color-text-secondary: #6B6B6B;
+  --color-accent: var(--color-clay);
+  --color-accent-hover: #D96A3C;
+  --color-brand: var(--color-moss);
+
+  /* Legacy aliases for existing components */
+  --color-accent-coral: var(--color-clay);
+  --color-accent-coral-hover: var(--color-accent-hover);
+
+  /* Hero Gradient */
+  --gradient-hero: linear-gradient(135deg, #F6C445 0%, #E8724A 40%, #E85694 70%, #F6A04A 100%);
+
+  /* Functional */
+  --color-border: rgba(46, 64, 54, 0.12);
+  --color-border-light: rgba(26, 26, 26, 0.06);
+  --color-overlay: rgba(26, 26, 26, 0.6);
+  --color-glass: rgba(255, 255, 255, 0.60);
+  --color-glass-border: rgba(46, 64, 54, 0.08);
+
+  /* Border Radius System */
+  --radius-sm: 1rem;
+  --radius-md: 2rem;
+  --radius-lg: 3rem;
+  --radius-pill: 100px;
+
+  /* Type Scale — Desktop */
+  --font-size-display: clamp(3.5rem, 8vw, 7rem);
+  --font-size-h1: clamp(2.5rem, 5vw, 4.5rem);
+  --font-size-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --font-size-h3: clamp(1.25rem, 2vw, 1.5rem);
+  --font-size-body: 1rem;
+  --font-size-small: 0.875rem;
+  --font-size-micro: 0.75rem;
+
+  /* Line Height */
+  --line-height-display: 0.95;
+  --line-height-heading: 1.1;
+  --line-height-body: 1.6;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.15em;
+
+  /* Base Grid */
+  --grid-columns: 12;
+  --grid-gutter: 1.5rem;
+  --grid-margin: clamp(1.5rem, 5vw, 6rem);
+  --max-width: 1440px;
+
+  /* Content Width */
+  --content-max-width: 1200px;
+  --content-narrow: 800px;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --space-5xl: 8rem;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 600ms;
+  --duration-slower: 1000ms;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-body);
+  font-size: var(--font-size-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Global Noise Overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: normal;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Typography Utility Classes ── */
+.font-display {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: var(--tracking-tight);
+}
+
+.font-heading {
+  font-family: 'Outfit', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+}
+
+.font-serif {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Hero Gradient Text */
+.gradient-text {
+  background: var(--gradient-hero);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Layout Utilities ── */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+}
+
+.section-padding {
+  padding: clamp(4rem, 10vh, 8rem) 0;
+}
+
+/* ── Motion / Animation Classes ── */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity 0.8s var(--ease-out-quart), transform 0.8s var(--ease-out-quart);
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Cards ── */
+.card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-bg-card);
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card--accent-clay {
+  background: var(--color-clay);
+  color: var(--color-cream);
+}
+
+.card--accent-moss {
+  background: var(--color-moss);
+  color: var(--color-cream);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: var(--color-clay);
+  color: var(--color-cream);
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius-pill);
+  font-family: 'Outfit', sans-serif;
+  font-size: var(--font-size-small);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: var(--color-moss);
+  color: var(--color-cream);
+}
+
+/* ── Navigation (Floating Island) ── */
+.nav-island {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 0.75rem 2.5rem;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  transition: all 0.4s var(--ease-out-expo);
+
+  /* Default: transparent at hero top */
+  background: transparent;
+  color: var(--color-charcoal);
+  border: 1px solid transparent;
+}
+
+.nav-island.scrolled {
+  background: rgba(255, 255, 255, 0.60);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--color-moss);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+
+.nav-island__logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+}
+
+.nav-island__links {
+  display: flex;
+  gap: 1.75rem;
+  font-family: 'Outfit', sans-serif;
+  font-size: var(--font-size-small);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.nav-island__links a {
+  transition: opacity 0.2s ease;
+}
+
+.nav-island__links a:hover {
+  opacity: 0.7;
+}
+
+/* ── Legacy nav (hidden) ── */
+.nav {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .nav-island {
+    padding: 0.6rem 1.25rem;
+    gap: 1.25rem;
+    width: 90%;
+    justify-content: space-between;
+  }
+
+  .nav-island__logo {
+    font-size: 0.9rem;
+  }
+
+  .nav-island__links {
+    gap: 1rem;
+    font-size: var(--font-size-micro);
+  }
+}

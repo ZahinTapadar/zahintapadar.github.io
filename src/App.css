@@ -1,0 +1,4 @@
+/* Clear default Vite styles to allow full-width edge-to-edge layouts */
+#root {
+  width: 100%;
+}
