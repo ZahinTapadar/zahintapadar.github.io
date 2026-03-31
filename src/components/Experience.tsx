@@ -1,5 +1,12 @@
 const expItems = [
     {
+        year: '2025',
+        title: 'Contractual Work',
+        company: 'BTR IPR',
+        link: 'https://www.btripr.in/',
+        desc: 'Contractual work for BTR IPR.'
+    },
+    {
         year: '2024',
         title: 'Web Development Intern (Frontend)',
         company: 'DataGlimpse',

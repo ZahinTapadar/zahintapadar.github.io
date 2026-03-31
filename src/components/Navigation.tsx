@@ -29,7 +29,7 @@ const Navigation = () => {
             <div className="nav-island__links">
                 <a href="#work" onClick={(e) => handleScrollTo(e, 'work')}>Work</a>
                 <a href="#experience" onClick={(e) => handleScrollTo(e, 'experience')}>Experience</a>
-                <a href="mailto:zahintapadar@gmail.com">Contact</a>
+                <a href="https://sysblogs.vercel.app/">Blog</a>
             </div>
         </nav>
     );

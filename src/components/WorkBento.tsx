@@ -7,8 +7,10 @@ import techForLifeImg from '../assets/telmac.png';
 import btrImg from '../assets/btr-logo.png';
 import quizeImg from '../assets/quizemac.jpg';
 import webGenyImg from '../assets/webgenymac.jpg';
+import adbAppManagerImg from '../assets/adbappmanager.png';
 
 const works = [
+    { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: '#' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: ollamaImg, link: 'https://beautifyollama.vercel.app/' },
     { id: 2, title: 'Tech For Life', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: techForLifeImg, link: 'https://techforlife.vercel.app/' },
     { id: 3, title: 'BTR GOV', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: btrImg, link: 'https://www.btripr.in/' },

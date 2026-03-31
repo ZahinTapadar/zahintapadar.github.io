@@ -3,7 +3,7 @@ import { SplineScene } from './SplineScene';
 import './TechStack.css';
 
 const techs = [
-    'C', 'C++', 'Unity', 'OpenGL', 'Python', 'React', 'Next.js', 'TypeScript', "Astro", "Svelte",
+    'C', 'C++', 'Unity', 'OpenGL', 'Python', 'Lua', 'LuaJIT', 'LÖVE', 'React', 'Next.js', 'TypeScript', "Astro", "Svelte",
     'GSAP', 'Tailwind CSS', 'Firebase', 'Vercel'
 ];
 
