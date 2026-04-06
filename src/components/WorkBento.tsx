@@ -8,6 +8,7 @@ import btrImg from '../assets/btr-logo.png';
 import quizeImg from '../assets/quizemac.jpg';
 import webGenyImg from '../assets/webgenymac.jpg';
 import adbAppManagerImg from '../assets/adbappmanager.png';
+import razerManagerImg from '../assets/razermanager.png';
 
 const works = [
     { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: '#' },
@@ -16,7 +17,8 @@ const works = [
     { id: 3, title: 'BTR GOV', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: btrImg, link: 'https://www.btripr.in/' },
     { id: 4, title: 'Personify', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: personifyImg, link: 'https://personify-iota.vercel.app/' },
     { id: 5, title: 'Quize', year: '2024', roles: [{ name: 'Role', value: 'Developed' }], image: quizeImg, link: 'https://quize-mps.vercel.app/' },
-    { id: 6, title: 'WebGeny', year: '2023', roles: [{ name: 'Role', value: 'Developed' }], image: webGenyImg, link: 'https://webgeny.pages.dev/' }
+    { id: 6, title: 'WebGeny', year: '2023', roles: [{ name: 'Role', value: 'Developed' }], image: webGenyImg, link: 'https://webgeny.pages.dev/' },
+    { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: [{ name: 'Experience', value: 'Built' }], image: razerManagerImg, link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' }
 ];
 
 const WorkBento = () => {
