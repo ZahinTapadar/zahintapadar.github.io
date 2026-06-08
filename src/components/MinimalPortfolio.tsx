@@ -8,6 +8,10 @@ import iconFolder from '../assets/icon_folder.jpg';
 import iconPictures from '../assets/icon_pictures.jpg';
 import iconStar from '../assets/icon_star.jpg';
 import graphicId from '../assets/graphic_id.jpg';
+import projectsImg from '../assets/projects.jpeg';
+import endlineImg from '../assets/endline.png';
+import startcleanImg from '../assets/startclean.png';
+import techstackImg from '../assets/techstack.jpeg';
 
 interface MinimalPortfolioProps {
     onToggleMode: () => void;
@@ -87,6 +91,13 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                 </div>
 
                 <section className="minimal-section">
+                    <div style={{ margin: '0 0 2rem 0', display: 'flex', justifyContent: 'center' }}>
+                        <img 
+                            src={startcleanImg} 
+                            alt="Start Graphic" 
+                            style={{ width: '100%', maxWidth: '500px', objectFit: 'contain' }}
+                        />
+                    </div>
                     <p>hey, i'm zahin.</p>
                     <p>
                         i'm a computer science student trying to get better at systems, algorithms, and low-level programming.
@@ -107,18 +118,28 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     <div className="minimal-socials" style={{ alignItems: 'center' }}>
                         <a href="https://github.com/zahintapadar" target="_blank" rel="noopener noreferrer">Github</a>
                         <a href="https://www.linkedin.com/in/zahin-tapadar-524640243/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                        <a href="https://github.com/nicholasgasior/gopher-webring" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                        <a href="https://ring.seggs.lol" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
                             <img src="/threadlocked.png" alt="Part of webring" style={{ height: '1.5rem', width: 'auto' }} />
                         </a>
                     </div>
                 </section>
 
-                <div className="minimal-divider">----------------------------------------</div>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+                    <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
+                </div>
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
                         <img src={iconFolder} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <h2 style={{ margin: 0 }}>projects</h2>
+                    </div>
+                    <div style={{ margin: '2rem 0', display: 'flex', justifyContent: 'center' }}>
+                        <img 
+                            src={projectsImg} 
+                            alt="Projects Graphic" 
+                            className="minimal-aesthetic-img"
+                            style={{ maxWidth: '400px' }}
+                        />
                     </div>
                     {works.map(work => (
                         <div key={work.id} className="minimal-project">
@@ -131,7 +152,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     ))}
                 </section>
 
-                <div className="minimal-divider">----------------------------------------</div>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+                    <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
+                </div>
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
@@ -152,7 +175,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     ))}
                 </section>
 
-                <div className="minimal-divider">----------------------------------------</div>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+                    <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
+                </div>
 
                 <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
                     <img 
@@ -165,7 +190,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconPictures} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                        <img src={techstackImg} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <h2 style={{ margin: 0 }}>tech stack</h2>
                     </div>
                     <div className="minimal-tech-list">
@@ -175,7 +200,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     </div>
                 </section>
 
-                <div className="minimal-divider">----------------------------------------</div>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+                    <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
+                </div>
 
                 <section className="minimal-section" style={{ paddingBottom: '4rem' }}>
                     <p>

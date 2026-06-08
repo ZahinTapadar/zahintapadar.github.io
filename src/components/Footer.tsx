@@ -30,7 +30,7 @@ const Footer = () => {
                         <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', justifyContent: 'flex-end', flexWrap: 'wrap', alignItems: 'center' }}>
                             <a href="https://github.com/zahintapadar" target="_blank" rel="noopener noreferrer" style={{ transition: 'color 0.2s', textDecoration: 'underline' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-clay)'} onMouseLeave={(e) => e.currentTarget.style.color = ''}>Github</a>
                             <a href="https://www.linkedin.com/in/zahin-tapadar-524640243/" target="_blank" rel="noopener noreferrer" style={{ transition: 'color 0.2s', textDecoration: 'underline' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-clay)'} onMouseLeave={(e) => e.currentTarget.style.color = ''}>LinkedIn</a>
-                            <a href="https://github.com/nicholasgasior/gopher-webring" target="_blank" rel="noopener noreferrer" style={{ transition: 'opacity 0.2s', display: 'inline-flex', alignItems: 'center' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                            <a href="https://ring.seggs.lol" target="_blank" rel="noopener noreferrer" style={{ transition: 'opacity 0.2s', display: 'inline-flex', alignItems: 'center' }} onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'} onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
                                 <img src="/threadlocked.png" alt="Part of webring" loading="lazy" decoding="async" style={{ height: '1.5rem', width: 'auto', display: 'block' }} />
                             </a>
                         </div>
