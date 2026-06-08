@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
 
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
@@ -13,10 +11,6 @@ import Footer from './components/Footer';
 function App() {
   // Simple intersection observer for scroll animations
   useEffect(() => {
-    // Initialize Lenis for smooth/momentum scrolling
-    const lenis = new Lenis({
-      autoRaf: true,
-    });
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -31,7 +25,6 @@ function App() {
 
     return () => {
       observer.disconnect();
-      lenis.destroy();
     };
   }, []);
 

@@ -35,15 +35,14 @@ const WorkBento = () => {
                 {works.map((work) => (
                     <div key={work.id} className="bento-item" data-animate>
                         <a href={work.link} target="_blank" rel="noopener noreferrer" style={{ display: 'block' }}>
-                            <div className="bento-image-card" style={{
-                                backgroundImage: `url(${work.image})`,
-                                backgroundSize: 'cover',
-                                backgroundPosition: 'center',
-                                transition: 'opacity 0.2s ease',
-                                cursor: 'pointer'
-                            }}
-                                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
-                                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}>
+                            <div className="bento-image-card">
+                                <img
+                                    src={work.image}
+                                    alt={work.title}
+                                    loading="lazy"
+                                    decoding="async"
+                                    className="bento-image"
+                                />
                             </div>
                         </a>
 

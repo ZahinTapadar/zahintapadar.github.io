@@ -1,19 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 const Navigation = () => {
     const [scrolled, setScrolled] = useState(false);
+    const scrolledRef = useRef(false);
+
+    const handleScroll = useCallback(() => {
+        const isScrolled = window.scrollY > 100;
+        if (isScrolled !== scrolledRef.current) {
+            scrolledRef.current = isScrolled;
+            setScrolled(isScrolled);
+        }
+    }, []);
 
     useEffect(() => {
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 100;
-            if (isScrolled !== scrolled) {
-                setScrolled(isScrolled);
-            }
-        };
-
         window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [scrolled]);
+    }, [handleScroll]);
 
     const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
         e.preventDefault();
