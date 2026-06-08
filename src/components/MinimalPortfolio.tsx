@@ -177,7 +177,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section" style={{ paddingBottom: '4rem' }}>
                     <p>
-                        if you want to collaborate, discuss ideas, or just point out something i got wrong, feel free to reach out: <a href="mailto:zahintapadar@gmail.com">zahintapadar@gmail.com</a>
+                        if you want to collaborate, discuss ideas, or just point out something i got wrong, feel free to reach out: <a href="mailto:zahintapadar@gmail.com">[email me]</a>
                     </p>
 
                     <div style={{ margin: '3rem 0' }}>

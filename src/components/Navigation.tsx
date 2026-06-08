@@ -35,9 +35,8 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleMode }) => {
             <div className="nav-island__links">
                 <a href="#work" onClick={(e) => handleScrollTo(e, 'work')}>Work</a>
                 <a href="#experience" onClick={(e) => handleScrollTo(e, 'experience')}>Experience</a>
-                <a href="https://sysblogs.vercel.app/">Blog</a>
                 {onToggleMode && (
-                    <button 
+                    <button
                         onClick={onToggleMode}
                         style={{
                             background: 'none',
@@ -55,7 +54,7 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleMode }) => {
                             padding: 0
                         }}
                     >
-                        {'[>_]'}
+                        Basic Mode
                     </button>
                 )}
             </div>
