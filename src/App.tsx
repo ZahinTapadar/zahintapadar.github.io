@@ -11,7 +11,8 @@ import MinimalPortfolio from './components/MinimalPortfolio';
 
 function App() {
   const [isMinimalMode, setIsMinimalMode] = useState(() => {
-    return localStorage.getItem('portfolioMode') === 'minimal';
+    const savedMode = localStorage.getItem('portfolioMode');
+    return savedMode === null ? true : savedMode === 'minimal';
   });
 
   const toggleMinimalMode = () => {

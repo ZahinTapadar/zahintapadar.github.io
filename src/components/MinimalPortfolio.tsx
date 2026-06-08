@@ -104,10 +104,12 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         />
                     </div>
                     
-                    <div className="minimal-socials">
-                        here are my socials:
-                        <a href="https://github.com/ZahinTapadar" target="_blank" rel="noopener noreferrer">github</a>
-                        <a href="https://linkedin.com/in/zahin-tapadar" target="_blank" rel="noopener noreferrer">linkedin</a>
+                    <div className="minimal-socials" style={{ alignItems: 'center' }}>
+                        <a href="https://github.com/zahintapadar" target="_blank" rel="noopener noreferrer">Github</a>
+                        <a href="https://www.linkedin.com/in/zahin-tapadar-524640243/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                        <a href="https://github.com/nicholasgasior/gopher-webring" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                            <img src="/threadlocked.png" alt="Part of webring" style={{ height: '1.5rem', width: 'auto' }} />
+                        </a>
                     </div>
                 </section>
 
