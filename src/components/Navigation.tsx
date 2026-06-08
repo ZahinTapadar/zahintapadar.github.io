@@ -54,7 +54,7 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleMode }) => {
                             padding: 0
                         }}
                     >
-                        Basic Mode
+                        Mode
                     </button>
                 )}
             </div>
