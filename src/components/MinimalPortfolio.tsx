@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MinimalPortfolio.css';
-import pfpImg from '../assets/pfp.jpeg';
+import pfpImg from '../assets/pfp.jpg';
 import firstImg from '../assets/first.jpg';
 import lastImg from '../assets/last.jpg';
 import iconComputer from '../assets/exp.jpg';
