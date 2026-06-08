@@ -11,6 +11,7 @@ import projectsImg from '../assets/projects.jpeg';
 import endlineImg from '../assets/endline.png';
 import startcleanImg from '../assets/startclean.png';
 import techstackImg from '../assets/techstack.jpeg';
+import playImg from '../assets/play.png';
 
 interface MinimalPortfolioProps {
     onToggleMode: () => void;
@@ -51,6 +52,8 @@ const techs = [
 
 const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => {
     const [time, setTime] = useState(new Date().toLocaleTimeString());
+    const [isPlayModalOpen, setIsPlayModalOpen] = useState(false);
+    const [selectedGame, setSelectedGame] = useState<'none' | 'dino' | 'flappy'>('none');
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
@@ -219,8 +222,47 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     <p style={{ color: '#5c6370', fontStyle: 'italic', marginTop: '2rem' }}>
                         EOF
                     </p>
+
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '4rem 0 2rem 0' }}>
+                        <img 
+                            src={playImg} 
+                            alt="Play" 
+                            style={{ width: '60px', height: '60px', cursor: 'pointer', objectFit: 'contain', opacity: 0.8, transition: 'opacity 0.2s' }}
+                            onClick={() => setIsPlayModalOpen(true)}
+                            onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                            onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
+                        />
+                    </div>
                 </section>
             </div>
+
+            {isPlayModalOpen && (
+                <div className="minimal-play-modal-overlay">
+                    <div className="minimal-play-modal">
+                        <div className="minimal-play-header">
+                            <h3>{selectedGame === 'none' ? 'select a game' : (selectedGame === 'dino' ? 't-rex runner' : 'flappy bird')}</h3>
+                            <button onClick={() => { setIsPlayModalOpen(false); setSelectedGame('none'); }}>[close]</button>
+                        </div>
+                        <div className="minimal-play-content">
+                            {selectedGame === 'none' ? (
+                                <div className="minimal-play-options">
+                                    <button onClick={() => setSelectedGame('dino')}>[play_dino]</button>
+                                    <button onClick={() => setSelectedGame('flappy')}>[play_flappy_bird]</button>
+                                </div>
+                            ) : selectedGame === 'dino' ? (
+                                <iframe src="https://offline-dino-game.firebaseapp.com/" width="100%" height="400px" frameBorder="0" style={{ borderRadius: '4px' }}></iframe>
+                            ) : (
+                                <iframe src="https://nebezb.com/floppybird/" width="100%" height="400px" frameBorder="0" style={{ borderRadius: '4px' }}></iframe>
+                            )}
+                            {selectedGame !== 'none' && (
+                                <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                                    <button onClick={() => setSelectedGame('none')} style={{ background: 'none', border: 'none', color: '#61afef', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'underline' }}>[back]</button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
