@@ -1,6 +1,10 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 
-const Navigation = () => {
+interface NavigationProps {
+    onToggleMode?: () => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ onToggleMode }) => {
     const [scrolled, setScrolled] = useState(false);
     const scrolledRef = useRef(false);
 
@@ -32,6 +36,28 @@ const Navigation = () => {
                 <a href="#work" onClick={(e) => handleScrollTo(e, 'work')}>Work</a>
                 <a href="#experience" onClick={(e) => handleScrollTo(e, 'experience')}>Experience</a>
                 <a href="https://sysblogs.vercel.app/">Blog</a>
+                {onToggleMode && (
+                    <button 
+                        onClick={onToggleMode}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            fontFamily: 'inherit',
+                            fontSize: 'inherit',
+                            textTransform: 'inherit',
+                            letterSpacing: 'inherit',
+                            fontWeight: 'inherit',
+                            color: 'inherit',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            padding: 0
+                        }}
+                    >
+                        {'[>_]'}
+                    </button>
+                )}
             </div>
         </nav>
     );

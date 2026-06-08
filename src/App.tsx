@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
@@ -7,10 +7,25 @@ import WorkBento from './components/WorkBento';
 import Experience from './components/Experience';
 import TechStack from './components/TechStack';
 import Footer from './components/Footer';
+import MinimalPortfolio from './components/MinimalPortfolio';
 
 function App() {
+  const [isMinimalMode, setIsMinimalMode] = useState(() => {
+    return localStorage.getItem('portfolioMode') === 'minimal';
+  });
+
+  const toggleMinimalMode = () => {
+    setIsMinimalMode(prev => {
+      const newMode = !prev;
+      localStorage.setItem('portfolioMode', newMode ? 'minimal' : 'rich');
+      return newMode;
+    });
+  };
+
   // Simple intersection observer for scroll animations
   useEffect(() => {
+    if (isMinimalMode) return; // Disable observer in minimal mode
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -26,11 +41,15 @@ function App() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isMinimalMode]);
+
+  if (isMinimalMode) {
+    return <MinimalPortfolio onToggleMode={toggleMinimalMode} />;
+  }
 
   return (
     <div className="app-container">
-      <Navigation />
+      <Navigation onToggleMode={toggleMinimalMode} />
       <main>
         <Hero />
         <About />

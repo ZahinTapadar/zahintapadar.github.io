@@ -1,0 +1,200 @@
+import React, { useEffect, useState } from 'react';
+import './MinimalPortfolio.css';
+import pfpImg from '../assets/pfp.jpg';
+import firstImg from '../assets/first.jpg';
+import lastImg from '../assets/last.jpg';
+import iconComputer from '../assets/icon_computer.jpg';
+import iconFolder from '../assets/icon_folder.jpg';
+import iconPictures from '../assets/icon_pictures.jpg';
+import iconStar from '../assets/icon_star.jpg';
+import graphicId from '../assets/graphic_id.jpg';
+
+interface MinimalPortfolioProps {
+    onToggleMode: () => void;
+}
+
+const works = [
+    { id: 7, title: 'ADB App Manager', year: '2026', roles: 'Developed', link: '#' },
+    { id: 1, title: 'BeautifyOllama', year: '2025', roles: 'Developed', link: 'https://beautifyollama.vercel.app/' },
+    { id: 2, title: 'Tech For Life', year: '2025', roles: 'Developed', link: 'https://techforlife.vercel.app/' },
+    { id: 3, title: 'BTR GOV', year: '2025', roles: 'Developed', link: 'https://www.btripr.in/' },
+    { id: 4, title: 'Personify', year: '2025', roles: 'Developed', link: 'https://personify-iota.vercel.app/' },
+    { id: 5, title: 'Quize', year: '2024', roles: 'Developed', link: 'https://quize-mps.vercel.app/' },
+    { id: 6, title: 'WebGeny', year: '2023', roles: 'Developed', link: 'https://webgeny.pages.dev/' },
+    { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: 'Built', link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' }
+];
+
+const expItems = [
+    {
+        year: '2025',
+        title: 'Contractual Work',
+        company: 'BTR IPR',
+        link: 'https://www.btripr.in/',
+        desc: 'Contractual work for BTR IPR.'
+    },
+    {
+        year: '2024',
+        title: 'Web Development Intern (Frontend)',
+        company: 'DataGlimpse',
+        link: 'https://www.linkedin.com/company/dataglimpse',
+        desc: 'Completed a 2-month internship focusing on frontend development, building out interfaces, and optimizing web experiences.'
+    }
+];
+
+const techs = [
+    'C', 'C++', 'Unity', 'OpenGL', 'Python', 'Lua', 'LuaJIT', 'LÖVE', 'React', 'Next.js', 'TypeScript', "Astro", "Svelte",
+    'GSAP', 'Tailwind CSS', 'Firebase', 'Vercel'
+];
+
+const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => {
+    const [time, setTime] = useState(new Date().toLocaleTimeString());
+
+    useEffect(() => {
+        const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    return (
+        <div className="minimal-portfolio">
+            <div className="minimal-container">
+                <header className="minimal-header">
+                    <div>
+                        <span style={{ color: '#5c6370' }}>EST. 2005</span>
+                    </div>
+                    <div style={{ color: '#5c6370' }}>
+                        {time} | GMT+5:30
+                    </div>
+                </header>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                        <img 
+                            src={pfpImg} 
+                            alt="Profile" 
+                            style={{ width: '80px', height: '80px', borderRadius: '4px', objectFit: 'cover' }}
+                        />
+                        <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                <h1 style={{ fontSize: '2em', marginBottom: '0.2rem', marginTop: 0 }}>zahin</h1>
+                                <img src={iconStar} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                            </div>
+                            <div style={{ color: '#5c6370', fontSize: '1.2em' }}>engineer</div>
+                        </div>
+                    </div>
+                    <nav className="minimal-nav">
+                        <button onClick={onToggleMode}>[rich_mode]</button>
+                    </nav>
+                </div>
+
+                <section className="minimal-section">
+                    <p>hey, i'm zahin.</p>
+                    <p>
+                        i'm a computer science student trying to get better at systems, algorithms, and low-level programming.
+                        basically, figuring out how things work under the hood while still building interfaces people can actually use.
+                    </p>
+                    <p>
+                        lately i've been spending more time understanding mathematical modeling, performance optimization, and computational thinking.
+                    </p>
+
+                    <div style={{ margin: '2rem 0' }}>
+                        <img 
+                            src={firstImg} 
+                            alt="Aesthetic scenery" 
+                            className="minimal-aesthetic-img"
+                        />
+                    </div>
+                    
+                    <div className="minimal-socials">
+                        here are my socials:
+                        <a href="https://github.com/ZahinTapadar" target="_blank" rel="noopener noreferrer">github</a>
+                        <a href="https://linkedin.com/in/zahin-tapadar" target="_blank" rel="noopener noreferrer">linkedin</a>
+                    </div>
+                </section>
+
+                <div className="minimal-divider">----------------------------------------</div>
+
+                <section className="minimal-section">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
+                        <img src={iconFolder} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        <h2 style={{ margin: 0 }}>projects</h2>
+                    </div>
+                    {works.map(work => (
+                        <div key={work.id} className="minimal-project">
+                            <div className="minimal-project-header">
+                                <a href={work.link} target="_blank" rel="noopener noreferrer" className="minimal-project-title">{work.title}</a>
+                                <span className="minimal-project-year">[{work.year}]</span>
+                            </div>
+                            <div className="minimal-role">({work.roles})</div>
+                        </div>
+                    ))}
+                </section>
+
+                <div className="minimal-divider">----------------------------------------</div>
+
+                <section className="minimal-section">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
+                        <img src={iconComputer} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        <h2 style={{ margin: 0 }}>experience</h2>
+                    </div>
+                    {expItems.map((item, idx) => (
+                        <div key={idx} className="minimal-experience-item">
+                            <div className="minimal-project-header">
+                                <span className="minimal-project-title">{item.title}</span>
+                                <span className="minimal-project-year">[{item.year}]</span>
+                            </div>
+                            <div style={{ marginBottom: '0.5rem' }}>
+                                <a href={item.link} target="_blank" rel="noopener noreferrer">@{item.company}</a>
+                            </div>
+                            <p style={{ color: '#abb2bf' }}>{item.desc}</p>
+                        </div>
+                    ))}
+                </section>
+
+                <div className="minimal-divider">----------------------------------------</div>
+
+                <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
+                    <img 
+                        src={graphicId} 
+                        alt="Aesthetic Graphic" 
+                        className="minimal-aesthetic-img"
+                        style={{ maxWidth: '400px' }}
+                    />
+                </div>
+
+                <section className="minimal-section">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
+                        <img src={iconPictures} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        <h2 style={{ margin: 0 }}>tech stack</h2>
+                    </div>
+                    <div className="minimal-tech-list">
+                        {techs.map((tech, idx) => (
+                            <span key={idx}>{tech}{idx < techs.length - 1 ? ' /' : ''}</span>
+                        ))}
+                    </div>
+                </section>
+
+                <div className="minimal-divider">----------------------------------------</div>
+
+                <section className="minimal-section" style={{ paddingBottom: '4rem' }}>
+                    <p>
+                        if you want to collaborate, discuss ideas, or just point out something i got wrong, feel free to reach out: <a href="mailto:zahintapadar@gmail.com">zahintapadar@gmail.com</a>
+                    </p>
+
+                    <div style={{ margin: '3rem 0' }}>
+                        <img 
+                            src={lastImg} 
+                            alt="Aesthetic ending" 
+                            className="minimal-aesthetic-img"
+                        />
+                    </div>
+
+                    <p style={{ color: '#5c6370', fontStyle: 'italic', marginTop: '2rem' }}>
+                        EOF
+                    </p>
+                </section>
+            </div>
+        </div>
+    );
+};
+
+export default MinimalPortfolio;

@@ -1,0 +1,128 @@
+.minimal-portfolio {
+  background-color: #000000;
+  color: #dddddd;
+  font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', Courier, monospace;
+  min-height: 100vh;
+  padding: 2rem;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.minimal-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.minimal-portfolio h1, 
+.minimal-portfolio h2, 
+.minimal-portfolio h3 {
+  font-weight: normal;
+  color: #ffffff;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.minimal-portfolio p {
+  margin-bottom: 1rem;
+}
+
+.minimal-portfolio a {
+  color: #61afef; /* Emacs-like blue */
+  text-decoration: none;
+}
+
+.minimal-portfolio a:hover {
+  text-decoration: underline;
+}
+
+.minimal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  border-bottom: 1px dashed #444;
+  padding-bottom: 1rem;
+}
+
+.minimal-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.minimal-nav button {
+  background: none;
+  border: none;
+  color: #e5c07b; /* Emacs-like yellow */
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+.minimal-nav button:hover {
+  text-decoration: underline;
+}
+
+.minimal-section {
+  margin-bottom: 3rem;
+}
+
+.minimal-divider {
+  color: #444;
+  margin: 2rem 0;
+}
+
+.minimal-project {
+  margin-bottom: 1.5rem;
+}
+
+.minimal-project-header {
+  display: flex;
+  align-items:baseline;
+  gap: 1rem;
+}
+
+.minimal-project-title {
+  color: #e06c75; /* Emacs-like red/pink */
+  font-size: 1.1em;
+}
+
+.minimal-project-year {
+  color: #5c6370;
+  font-size: 0.9em;
+}
+
+.minimal-role {
+  color: #98c379; /* Emacs-like green */
+  font-size: 0.9em;
+}
+
+.minimal-tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  color: #c678dd; /* Emacs-like purple */
+}
+
+.minimal-experience-item {
+  margin-bottom: 1.5rem;
+}
+
+.minimal-socials {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.minimal-aesthetic-img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .minimal-portfolio {
+    padding: 1rem;
+  }
+}
