@@ -59,7 +59,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
             <div className="minimal-container">
                 <header className="minimal-header">
                     <div>
-                        <span style={{ color: '#5c6370' }}>EST. 2005</span>
+                        <span style={{ color: '#5c6370' }}>EST. 2019</span>
                     </div>
                     <div style={{ color: '#5c6370' }}>
                         {time} | GMT+5:30
@@ -115,7 +115,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconFolder} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        <img src={iconFolder} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <h2 style={{ margin: 0 }}>projects</h2>
                     </div>
                     {works.map(work => (
@@ -133,7 +133,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconComputer} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        <img src={iconComputer} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <h2 style={{ margin: 0 }}>experience</h2>
                     </div>
                     {expItems.map((item, idx) => (
@@ -163,7 +163,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconPictures} alt="" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+                        <img src={iconPictures} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <h2 style={{ margin: 0 }}>tech stack</h2>
                     </div>
                     <div className="minimal-tech-list">
