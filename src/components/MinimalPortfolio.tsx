@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './MinimalPortfolio.css';
-import pfpImg from '../assets/pfp.jpg';
+import pfpImg from '../assets/pfpNew.jpeg';
 import firstImg from '../assets/first.jpg';
 import lastImg from '../assets/last.jpg';
-import iconComputer from '../assets/icon_computer.jpg';
-import iconFolder from '../assets/icon_folder.jpg';
+import iconComputer from '../assets/exp.jpg';
+import iconFolder from '../assets/project.jpg';
 import iconStar from '../assets/icon_star.jpg';
 import graphicId from '../assets/graphic_id.jpg';
 import projectsImg from '../assets/projects.jpeg';
