@@ -7,6 +7,7 @@ import App from './App.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
-    <Analytics />
+    {/* Vercel Analytics only exists on the Vercel deployment, not GitHub Pages */}
+    {!location.hostname.endsWith('github.io') && <Analytics />}
   </StrictMode>,
 )
