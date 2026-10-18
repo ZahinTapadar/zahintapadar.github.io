@@ -62,7 +62,8 @@ const techGroups = [
     { dir: 'languages', color: '#e5c07b', items: ['Python', 'Lua', 'LuaJIT', 'TypeScript'] },
     { dir: 'gamedev', color: '#c678dd', items: ['Unity', 'LÖVE'] },
     { dir: 'web', color: '#61afef', items: ['React', 'Next.js', 'Astro', 'Svelte', 'Tailwind CSS', 'GSAP'] },
-    { dir: 'infra', color: '#98c379', items: ['Firebase', 'Vercel'] }
+    { dir: 'infra', color: '#98c379', items: ['Firebase', 'Vercel'] },
+    { dir: 'tools', color: '#56b6c2', items: ['Neovim', 'IDA Pro', 'Ghidra'] }
 ];
 
 const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => {
