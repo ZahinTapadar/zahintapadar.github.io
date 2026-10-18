@@ -97,113 +97,6 @@
   font-size: 0.9em;
 }
 
-/* Tech stack rendered as `tree` output */
-.minimal-tree {
-  border: 1px dashed #444;
-  border-radius: 4px;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(180deg, #0b0d10 0%, #000 100%);
-}
-
-.minimal-tree-prompt {
-  margin-bottom: 0.75rem;
-  color: #dddddd;
-}
-
-.minimal-tree-row {
-  display: grid;
-  grid-template-columns: auto 6.5rem 1fr;
-  align-items: start;
-  gap: 0.6rem;
-  padding: 0.35rem 0;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  transition-delay: calc(var(--row) * 120ms);
-}
-
-.minimal-tree-branch {
-  color: #444;
-}
-
-.minimal-tree-dir {
-  color: var(--accent);
-  font-weight: bold;
-}
-
-.minimal-tree-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-.minimal-tree-chip {
-  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
-  color: var(--accent);
-  padding: 0 0.5rem;
-  border-radius: 3px;
-  font-size: 0.92em;
-  line-height: 1.6;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s, box-shadow 0.2s;
-  transition-delay: calc(200ms + var(--chip) * 45ms);
-  cursor: default;
-}
-
-.minimal-tree-chip:hover {
-  background: color-mix(in srgb, var(--accent) 22%, transparent);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
-  transform: translateY(-2px);
-  transition-delay: 0s;
-}
-
-.minimal-tree-summary {
-  margin-top: 0.75rem;
-  color: #5c6370;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  transition-delay: calc(var(--row) * 120ms + 600ms);
-}
-
-.minimal-tree.is-visible .minimal-tree-row,
-.minimal-tree.is-visible .minimal-tree-chip,
-.minimal-tree.is-visible .minimal-tree-summary {
-  opacity: 1;
-  transform: none;
-}
-
-.minimal-tree-cursor {
-  margin-left: 0.25rem;
-  color: #dddddd;
-  animation: tree-blink 1s steps(1) infinite;
-}
-
-@keyframes tree-blink {
-  50% { opacity: 0; }
-}
-
-@media (max-width: 600px) {
-  .minimal-tree-row {
-    grid-template-columns: auto 1fr;
-  }
-  .minimal-tree-chips {
-    grid-column: 2;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .minimal-tree-row,
-  .minimal-tree-chip,
-  .minimal-tree-summary {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .minimal-tree-cursor { animation: none; }
-}
-
 .minimal-experience-item {
   margin-bottom: 1.5rem;
 }
@@ -294,7 +187,7 @@
 }
 
 .minimal-play-options button {
-  background: none;
+  background: linear-gradient(135deg, rgba(97, 175, 239, 0.16), rgba(97, 175, 239, 0.04));
   border: 1px solid #61afef;
   color: #61afef;
   padding: 0.75rem 1.5rem;
@@ -306,8 +199,7 @@
 }
 
 .minimal-play-options button:hover {
-  background: #61afef;
-  color: #000;
+  background: linear-gradient(135deg, rgba(97, 175, 239, 0.3), rgba(97, 175, 239, 0.1));
 }
 
 .minimal-game-canvas {
@@ -321,12 +213,6 @@
 }
 
 /* Contribution graph */
-.minimal-contrib {
-  border: 1px dashed #444;
-  border-radius: 4px;
-  padding: 1rem;
-}
-
 .minimal-contrib-header {
   display: flex;
   justify-content: space-between;
@@ -413,6 +299,140 @@
 .minimal-contrib-legend span:first-child { margin-right: 4px; }
 .minimal-contrib-legend span:last-child { margin-left: 4px; }
 
-.minimal-contrib-list {
-  margin-top: 1.5rem;
+/* Terminal panels: every normal-mode section is a boxed shell session */
+.term-panel {
+  border: 1px dashed #444;
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(180deg, #0b0d10 0%, #000 100%);
+}
+
+.term-prompt {
+  color: #dddddd;
+  margin-bottom: 0.5rem;
+}
+
+.term-row > .term-prompt {
+  margin: 0.75rem 0 0 0;
+}
+
+.term-row {
+  padding: 0.3rem 0;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition-delay: calc(var(--row) * 110ms);
+}
+
+.term-text {
+  margin: 0 !important;
+  color: #abb2bf;
+}
+
+.term-hl {
+  border-bottom: 1px dashed currentColor;
+}
+
+.term-dim {
+  color: #5c6370;
+}
+
+.term-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.term-chip {
+  display: inline-block;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--accent) 4%, transparent));
+  color: var(--accent) !important;
+  padding: 0 0.5rem;
+  border-radius: 3px;
+  font-size: 0.92em;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s;
+  transition-delay: calc(200ms + var(--chip) * 45ms);
+  cursor: default;
+}
+
+.term-chip-link {
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.term-chip-img {
+  display: inline-flex;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transition-delay: calc(200ms + var(--chip) * 45ms);
+}
+
+.term-chip:hover {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 28%, transparent), color-mix(in srgb, var(--accent) 10%, transparent));
+  transition-delay: 0s;
+}
+
+.term-panel.is-visible .term-row,
+.term-panel.is-visible .term-chip,
+.term-panel.is-visible .term-chip-img {
+  opacity: 1;
+  transform: none;
+}
+
+/* ls -l rows */
+.term-ls-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+/* git log rows */
+.term-log-desc {
+  color: #abb2bf;
+  padding-left: 1rem;
+  border-left: 1px solid #333;
+  margin: 0.35rem 0 0.25rem 0.4rem;
+}
+
+/* tree rows */
+.minimal-tree-row {
+  display: grid;
+  grid-template-columns: auto 6.5rem 1fr;
+  align-items: start;
+  gap: 0.6rem;
+}
+
+.minimal-tree-dir {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .term-panel {
+    padding: 0.85rem;
+  }
+  .term-ls-row {
+    gap: 0.75rem;
+  }
+  .minimal-tree-row {
+    grid-template-columns: auto 1fr;
+  }
+  .term-chips {
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term-row,
+  .term-chip,
+  .term-chip-img {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

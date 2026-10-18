@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import TerminalPanel, { TermPrompt } from './TerminalPanel';
 
 const GITHUB_USER = 'zahintapadar';
 
@@ -73,51 +74,52 @@ const ContributionGraph: React.FC = () => {
 
     return (
         <section className="minimal-section">
-            <div className="minimal-contrib">
+            <TerminalPanel cmd="gh contributions">
                 <div className="minimal-contrib-header">
-                    <a href={`https://github.com/${GITHUB_USER}`} target="_blank" rel="noopener noreferrer">~/github/{GITHUB_USER}</a>
+                    <a href={`https://github.com/${GITHUB_USER}`} target="_blank" rel="noopener noreferrer">github.com/{GITHUB_USER}</a>
                     <span className="minimal-project-year">
                         {total !== null ? `${total} contributions in the last year` : failed ? 'graph unavailable' : 'loading...'}
                     </span>
                 </div>
 
-                <div className="minimal-contrib-scroll" ref={scrollRef}>
-                    <div className="minimal-contrib-grid">
-                        {weeks.map((week, w) => {
-                            // Label the week in which a new month starts
-                            const first = week.find(d => d && new Date(d.date).getUTCDate() === 1);
-                            return (
-                                <div key={w} className="minimal-contrib-week">
-                                    <span className="minimal-contrib-month">
-                                        {first ? MONTHS[new Date(first.date).getUTCMonth()] : ''}
-                                    </span>
-                                    {week.map((day, d) => day ? (
-                                        <span
-                                            key={d}
-                                            className={`minimal-contrib-cell level-${day.level}`}
-                                            style={{ '--i': w } as React.CSSProperties}
-                                            title={`${day.count} contribution${day.count === 1 ? '' : 's'} on ${day.date}`}
-                                        />
-                                    ) : (
-                                        <span key={d} className="minimal-contrib-cell empty" />
-                                    ))}
-                                </div>
-                            );
-                        })}
+                <div>
+                    <div className="minimal-contrib-scroll" ref={scrollRef}>
+                        <div className="minimal-contrib-grid">
+                            {weeks.map((week, w) => {
+                                // Label the week in which a new month starts
+                                const first = week.find(d => d && new Date(d.date).getUTCDate() === 1);
+                                return (
+                                    <div key={w} className="minimal-contrib-week">
+                                        <span className="minimal-contrib-month">
+                                            {first ? MONTHS[new Date(first.date).getUTCMonth()] : ''}
+                                        </span>
+                                        {week.map((day, d) => day ? (
+                                            <span
+                                                key={d}
+                                                className={`minimal-contrib-cell level-${day.level}`}
+                                                style={{ '--i': w } as React.CSSProperties}
+                                                title={`${day.count} contribution${day.count === 1 ? '' : 's'} on ${day.date}`}
+                                            />
+                                        ) : (
+                                            <span key={d} className="minimal-contrib-cell empty" />
+                                        ))}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="minimal-contrib-legend">
+                        <span>less</span>
+                        {[0, 1, 2, 3, 4].map(l => <span key={l} className={`minimal-contrib-cell level-${l}`} />)}
+                        <span>more</span>
                     </div>
                 </div>
 
-                <div className="minimal-contrib-legend">
-                    <span>less</span>
-                    {[0, 1, 2, 3, 4].map(l => <span key={l} className={`minimal-contrib-cell level-${l}`} />)}
-                    <span>more</span>
-                </div>
-            </div>
+                <TermPrompt cmd="gh pr list --merged" />
 
-            <div className="minimal-contrib-list">
-                <div style={{ color: '#5c6370', marginBottom: '0.75rem' }}>// recent open-source contributions</div>
                 {contributions.map(c => (
-                    <div key={c.repo} className="minimal-project">
+                    <div key={c.repo} className="minimal-project" style={{ marginBottom: '0.75rem' }}>
                         <div className="minimal-project-header">
                             <a href={c.link} target="_blank" rel="noopener noreferrer" className="minimal-project-title">{c.repo}</a>
                             <span className="minimal-project-year">[{c.date}]</span>
@@ -128,7 +130,7 @@ const ContributionGraph: React.FC = () => {
                         </div>
                     </div>
                 ))}
-            </div>
+            </TerminalPanel>
         </section>
     );
 };
