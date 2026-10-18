@@ -13,14 +13,14 @@ import schwarzschildImg from '../assets/schwarzschildlab.webp';
 
 const works = [
     { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://zahintapadar.github.io/schwarzschild-lab/' },
-    { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: '#' },
+    { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: 'https://github.com/ZahinTapadar/adb-app-manager' },
+    { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: [{ name: 'Experience', value: 'Built' }], image: razerManagerImg, link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: ollamaImg, link: 'https://beautifyollama.vercel.app/' },
     { id: 2, title: 'Tech For Life', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: techForLifeImg, link: 'https://techforlife.vercel.app/' },
     { id: 3, title: 'BTR GOV', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: btrImg, link: 'https://www.btripr.in/' },
     { id: 4, title: 'Personify', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: personifyImg, link: 'https://personify-iota.vercel.app/' },
     { id: 5, title: 'Quize', year: '2024', roles: [{ name: 'Role', value: 'Developed' }], image: quizeImg, link: 'https://quize-mps.vercel.app/' },
-    { id: 6, title: 'WebGeny', year: '2023', roles: [{ name: 'Role', value: 'Developed' }], image: webGenyImg, link: 'https://webgeny.pages.dev/' },
-    { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: [{ name: 'Experience', value: 'Built' }], image: razerManagerImg, link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' }
+    { id: 6, title: 'WebGeny', year: '2023', roles: [{ name: 'Role', value: 'Developed' }], image: webGenyImg, link: 'https://webgeny.pages.dev/' }
 ];
 
 const WorkBento = () => {
