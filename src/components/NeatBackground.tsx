@@ -194,15 +194,42 @@ export function NeatBackground({ config, className, style }: NeatBackgroundProps
     const gradientRef = useRef<NeatGradient | null>(null);
 
     useEffect(() => {
-        if (!canvasRef.current) return;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-        gradientRef.current = new NeatGradient({
-            ref: canvasRef.current,
-            ...config,
+        // NeatGradient renders every frame forever and has no pause API. Capture its
+        // render callback while it schedules the first frame, so we can stop the loop
+        // whenever the canvas is off screen and restart it when it comes back.
+        const nativeRaf = window.requestAnimationFrame;
+        let renderLoop: FrameRequestCallback | null = null;
+        window.requestAnimationFrame = (cb) => {
+            renderLoop = cb;
+            return nativeRaf(cb);
+        };
+        let gradient: NeatGradient;
+        try {
+            gradient = new NeatGradient({ ref: canvas, ...config });
+        } finally {
+            window.requestAnimationFrame = nativeRaf;
+        }
+        gradientRef.current = gradient;
+        const loop = gradient as unknown as { requestRef: number };
+
+        let running = true;
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !running && renderLoop) {
+                running = true;
+                loop.requestRef = requestAnimationFrame(renderLoop);
+            } else if (!entry.isIntersecting && running) {
+                running = false;
+                cancelAnimationFrame(loop.requestRef);
+            }
         });
+        observer.observe(canvas);
 
         return () => {
-            gradientRef.current?.destroy();
+            observer.disconnect();
+            gradient.destroy();
             gradientRef.current = null;
         };
     }, []);

@@ -13,6 +13,9 @@ import startcleanImg from '../assets/startclean.png';
 import techstackImg from '../assets/techstack.jpeg';
 import playImg from '../assets/play.png';
 import ContributionGraph from './ContributionGraph';
+import TechTree from './TechTree';
+import StackOverflow from './games/StackOverflow';
+import GarbageCollector from './games/GarbageCollector';
 
 interface MinimalPortfolioProps {
     onToggleMode: () => void;
@@ -47,15 +50,18 @@ const expItems = [
     }
 ];
 
-const techs = [
-    'C', 'C++', 'Unity', 'OpenGL', 'Python', 'Lua', 'LuaJIT', 'LÖVE', 'React', 'Next.js', 'TypeScript', "Astro", "Svelte",
-    'GSAP', 'Tailwind CSS', 'Firebase', 'Vercel'
+const techGroups = [
+    { dir: 'systems', color: '#e06c75', items: ['C', 'C++', 'OpenGL'] },
+    { dir: 'languages', color: '#e5c07b', items: ['Python', 'Lua', 'LuaJIT', 'TypeScript'] },
+    { dir: 'gamedev', color: '#c678dd', items: ['Unity', 'LÖVE'] },
+    { dir: 'web', color: '#61afef', items: ['React', 'Next.js', 'Astro', 'Svelte', 'Tailwind CSS', 'GSAP'] },
+    { dir: 'infra', color: '#98c379', items: ['Firebase', 'Vercel'] }
 ];
 
 const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => {
     const [time, setTime] = useState(new Date().toLocaleTimeString());
     const [isPlayModalOpen, setIsPlayModalOpen] = useState(false);
-    const [selectedGame, setSelectedGame] = useState<'none' | 'dino' | 'flappy'>('none');
+    const [selectedGame, setSelectedGame] = useState<'none' | 'stack' | 'gc'>('none');
 
     useEffect(() => {
         const timer = setInterval(() => setTime(new Date().toLocaleTimeString()), 1000);
@@ -199,11 +205,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         <img src={techstackImg} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
                         <h2 style={{ margin: 0 }}>tech stack</h2>
                     </div>
-                    <div className="minimal-tech-list">
-                        {techs.map((tech, idx) => (
-                            <span key={idx}>{tech}{idx < techs.length - 1 ? ' /' : ''}</span>
-                        ))}
-                    </div>
+                    <TechTree groups={techGroups} />
                 </section>
 
                 <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
@@ -244,19 +246,19 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                 <div className="minimal-play-modal-overlay">
                     <div className="minimal-play-modal">
                         <div className="minimal-play-header">
-                            <h3>{selectedGame === 'none' ? 'select a game' : (selectedGame === 'dino' ? 't-rex runner' : 'flappy bird')}</h3>
+                            <h3>{selectedGame === 'none' ? 'select a game' : (selectedGame === 'stack' ? 'stack_overflow' : 'garbage_collector')}</h3>
                             <button onClick={() => { setIsPlayModalOpen(false); setSelectedGame('none'); }}>[close]</button>
                         </div>
                         <div className="minimal-play-content">
                             {selectedGame === 'none' ? (
                                 <div className="minimal-play-options">
-                                    <button onClick={() => setSelectedGame('dino')}>[play_dino]</button>
-                                    <button onClick={() => setSelectedGame('flappy')}>[play_flappy_bird]</button>
+                                    <button onClick={() => setSelectedGame('stack')}>[stack_overflow]</button>
+                                    <button onClick={() => setSelectedGame('gc')}>[garbage_collector]</button>
                                 </div>
-                            ) : selectedGame === 'dino' ? (
-                                <iframe src="https://offline-dino-game.firebaseapp.com/" width="100%" height="400px" frameBorder="0" style={{ borderRadius: '4px' }}></iframe>
+                            ) : selectedGame === 'stack' ? (
+                                <StackOverflow />
                             ) : (
-                                <iframe src="https://nebezb.com/floppybird/" width="100%" height="400px" frameBorder="0" style={{ borderRadius: '4px' }}></iframe>
+                                <GarbageCollector />
                             )}
                             {selectedGame !== 'none' && (
                                 <div style={{ marginTop: '1rem', textAlign: 'center' }}>

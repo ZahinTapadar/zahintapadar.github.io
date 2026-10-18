@@ -1,14 +1,14 @@
 import './WorkBento.css';
 
 // Project image imports
-import personifyImg from '../assets/personifymac.png';
-import ollamaImg from '../assets/ollamamac.png';
-import techForLifeImg from '../assets/telmac.png';
+import personifyImg from '../assets/personifymac.webp';
+import ollamaImg from '../assets/ollamamac.webp';
+import techForLifeImg from '../assets/telmac.webp';
 import btrImg from '../assets/btr-logo.png';
-import quizeImg from '../assets/quizemac.jpg';
-import webGenyImg from '../assets/webgenymac.jpg';
-import adbAppManagerImg from '../assets/adbappmanager.png';
-import razerManagerImg from '../assets/razermanager.png';
+import quizeImg from '../assets/quizemac.webp';
+import webGenyImg from '../assets/webgenymac.webp';
+import adbAppManagerImg from '../assets/adbappmanager.webp';
+import razerManagerImg from '../assets/razermanager.webp';
 
 const works = [
     { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: '#' },
