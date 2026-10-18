@@ -2,8 +2,9 @@ import { NeatBackground, techStackGradientConfig } from './NeatBackground';
 import './TechStack.css';
 
 const techs = [
-    'C', 'C++', 'Unity', 'OpenGL', 'Python', 'Lua', 'LuaJIT', 'LÖVE', 'React', 'Next.js', 'TypeScript', "Astro", "Svelte",
-    'GSAP', 'Tailwind CSS', 'Firebase', 'Vercel'
+    'C', 'C++', 'Rust', 'WebAssembly', 'OpenGL', 'WebGL2', 'GLSL', 'Unity', 'Python', 'Lua', 'LuaJIT', 'LÖVE',
+    'React', 'Next.js', 'TypeScript', 'Astro', 'Svelte', 'GSAP', 'Tailwind CSS', 'Tauri',
+    'Firebase', 'Vercel', 'GitHub Actions', 'Neovim', 'IDA Pro', 'Ghidra'
 ];
 
 const TechStack = () => {
