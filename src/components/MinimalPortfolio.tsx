@@ -12,6 +12,8 @@ import endlineImg from '../assets/endline.png';
 import startcleanImg from '../assets/startclean.png';
 import techstackImg from '../assets/techstack.jpeg';
 import playImg from '../assets/play.png';
+import gothicImg from '../assets/edge.jpeg';
+import lilyImg from '../assets/bgblr2.jpg';
 import ContributionGraph from './ContributionGraph';
 import TechTree from './TechTree';
 import TerminalPanel, { TermPrompt } from './TerminalPanel';
@@ -92,9 +94,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '3rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                        <img 
-                            src={pfpImg} 
-                            alt="Profile" 
+                        <img
+                            src={pfpImg}
+                            alt="Profile"
                             style={{ width: '80px', height: '80px', borderRadius: '4px', objectFit: 'cover' }}
                         />
                         <div>
@@ -114,9 +116,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ margin: '0 0 2rem 0', display: 'flex', justifyContent: 'center' }}>
-                        <img 
-                            src={startcleanImg} 
-                            alt="Start Graphic" 
+                        <img
+                            src={startcleanImg}
+                            alt="Start Graphic"
                             style={{ width: '100%', maxWidth: '500px', objectFit: 'contain' }}
                         />
                     </div>
@@ -143,9 +145,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     </TerminalPanel>
 
                     <div style={{ margin: '2rem 0 0 0' }}>
-                        <img 
-                            src={firstImg} 
-                            alt="Aesthetic scenery" 
+                        <img
+                            src={firstImg}
+                            alt="Aesthetic scenery"
                             className="minimal-aesthetic-img"
                         />
                     </div>
@@ -161,9 +163,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         <h2 style={{ margin: 0 }}>projects</h2>
                     </div>
                     <div style={{ margin: '2rem 0', display: 'flex', justifyContent: 'center' }}>
-                        <img 
-                            src={projectsImg} 
-                            alt="Projects Graphic" 
+                        <img
+                            src={projectsImg}
+                            alt="Projects Graphic"
                             className="minimal-aesthetic-img"
                             style={{ maxWidth: '400px' }}
                         />
@@ -209,9 +211,9 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                 </div>
 
                 <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
-                    <img 
-                        src={mikuImg} 
-                        alt="Aesthetic Graphic" 
+                    <img
+                        src={mikuImg}
+                        alt="Aesthetic Graphic"
                         className="minimal-aesthetic-img"
                         style={{ maxWidth: '400px' }}
                     />
@@ -229,7 +231,15 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
                 </div>
 
-                <section className="minimal-section" style={{ paddingBottom: '4rem' }}>
+                <section className="minimal-section" style={{ marginBottom: 0 }}>
+                    <div style={{ margin: '0 0 2rem 0', display: 'flex', justifyContent: 'center' }}>
+                        <img
+                            src={lilyImg}
+                            alt="Spider lily"
+                            className="minimal-aesthetic-img"
+                            style={{ maxWidth: '400px' }}
+                        />
+                    </div>
                     <TerminalPanel cmd="./contact">
                         <p className="term-text">
                             if you want to collaborate, discuss ideas, or just point out something i got wrong, feel free to reach out:
@@ -240,28 +250,34 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     </TerminalPanel>
 
                     <div style={{ margin: '3rem 0' }}>
-                        <img 
-                            src={lastImg} 
-                            alt="Aesthetic ending" 
+                        <img
+                            src={lastImg}
+                            alt="Aesthetic ending"
                             className="minimal-aesthetic-img"
                         />
                     </div>
 
-                    <p style={{ color: '#5c6370', fontStyle: 'italic', marginTop: '2rem' }}>
+                </section>
+            </div>
+
+            {/* Full-width ending: the artwork fades in from black right after the last picture */}
+            <div className="minimal-eof" style={{ '--eof-bg': `url(${gothicImg})` } as React.CSSProperties}>
+                <div className="minimal-eof-inner">
+                    <p style={{ color: '#5c6370', fontStyle: 'italic', margin: 0 }}>
                         EOF
                     </p>
 
-                    <div style={{ display: 'flex', justifyContent: 'center', margin: '4rem 0 2rem 0' }}>
-                        <img 
-                            src={playImg} 
-                            alt="Play" 
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '4rem 0 0 0' }}>
+                        <img
+                            src={playImg}
+                            alt="Play"
                             style={{ width: '60px', height: '60px', cursor: 'pointer', objectFit: 'contain', opacity: 0.8, transition: 'opacity 0.2s' }}
                             onClick={() => setIsPlayModalOpen(true)}
                             onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
                             onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}
                         />
                     </div>
-                </section>
+                </div>
             </div>
 
             {isPlayModalOpen && (
