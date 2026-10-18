@@ -23,7 +23,7 @@ interface MinimalPortfolioProps {
 }
 
 const works: { id: number; title: string; year: string; roles: string; detail?: string; link: string }[] = [
-    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: 'Built', detail: 'black hole ray tracer, rust/wasm', link: 'https://github.com/ZahinTapadar/schwarzschild-lab' },
+    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: 'Built', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: 'Developed', link: '#' },
     { id: 9, title: 'Lua Wordle Solver', year: '2026', roles: 'Built', detail: 'lua + c minimax core', link: 'https://github.com/ZahinTapadar/Wordle-Algorithm/tree/lua-implementation' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: 'Developed', link: 'https://beautifyollama.vercel.app/' },
