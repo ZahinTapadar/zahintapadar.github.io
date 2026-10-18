@@ -59,11 +59,12 @@ const links = [
 ];
 
 const techGroups = [
-    { dir: 'systems', color: '#e06c75', items: ['C', 'C++', 'OpenGL'] },
+    { dir: 'systems', color: '#e06c75', items: ['C', 'C++', 'Rust', 'WebAssembly'] },
+    { dir: 'graphics', color: '#d19a66', items: ['OpenGL', 'WebGL2', 'GLSL'] },
     { dir: 'languages', color: '#e5c07b', items: ['Python', 'Lua', 'LuaJIT', 'TypeScript'] },
     { dir: 'gamedev', color: '#c678dd', items: ['Unity', 'LÖVE'] },
-    { dir: 'web', color: '#61afef', items: ['React', 'Next.js', 'Astro', 'Svelte', 'Tailwind CSS', 'GSAP'] },
-    { dir: 'infra', color: '#98c379', items: ['Firebase', 'Vercel'] },
+    { dir: 'web', color: '#61afef', items: ['React', 'Next.js', 'Astro', 'Svelte', 'Tailwind CSS', 'GSAP', 'Tauri'] },
+    { dir: 'infra', color: '#98c379', items: ['Firebase', 'Vercel', 'GitHub Actions'] },
     { dir: 'tools', color: '#56b6c2', items: ['Neovim', 'IDA Pro', 'Ghidra'] }
 ];
 
