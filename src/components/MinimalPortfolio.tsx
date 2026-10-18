@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MinimalPortfolio.css';
-import pfpImg from '../assets/pfp.jpg';
+import pfpImg from '../assets/pfp-cyberpunk.png';
 import firstImg from '../assets/first.jpg';
 import lastImg from '../assets/last.jpg';
 import iconComputer from '../assets/exp.jpg';
@@ -12,6 +12,7 @@ import endlineImg from '../assets/endline.png';
 import startcleanImg from '../assets/startclean.png';
 import techstackImg from '../assets/techstack.jpeg';
 import playImg from '../assets/play.png';
+import ContributionGraph from './ContributionGraph';
 
 interface MinimalPortfolioProps {
     onToggleMode: () => void;
@@ -19,6 +20,7 @@ interface MinimalPortfolioProps {
 
 const works = [
     { id: 7, title: 'ADB App Manager', year: '2026', roles: 'Developed', link: '#' },
+    { id: 9, title: 'Lua Wordle Solver', year: '2026', roles: 'Built (Lua + C minimax core)', link: 'https://github.com/ZahinTapadar/Wordle-Algorithm/tree/lua-implementation' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: 'Developed', link: 'https://beautifyollama.vercel.app/' },
     { id: 2, title: 'Tech For Life', year: '2025', roles: 'Developed', link: 'https://techforlife.vercel.app/' },
     { id: 3, title: 'BTR GOV', year: '2025', roles: 'Developed', link: 'https://www.btripr.in/' },
@@ -91,6 +93,8 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         <button onClick={onToggleMode}>[rich_mode]</button>
                     </nav>
                 </div>
+
+                <ContributionGraph />
 
                 <section className="minimal-section">
                     <div style={{ margin: '0 0 2rem 0', display: 'flex', justifyContent: 'center' }}>
