@@ -6,7 +6,7 @@ import lastImg from '../assets/last.jpg';
 import iconComputer from '../assets/exp.jpg';
 import iconFolder from '../assets/project.jpg';
 import iconStar from '../assets/icon_star.jpg';
-import graphicId from '../assets/graphic_id.jpg';
+import mikuImg from '../assets/b&wmiku.jpeg';
 import projectsImg from '../assets/projects.jpeg';
 import endlineImg from '../assets/endline.png';
 import startcleanImg from '../assets/startclean.png';
@@ -210,7 +210,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
                     <img 
-                        src={graphicId} 
+                        src={mikuImg} 
                         alt="Aesthetic Graphic" 
                         className="minimal-aesthetic-img"
                         style={{ maxWidth: '400px' }}
