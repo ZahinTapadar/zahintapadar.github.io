@@ -12,7 +12,7 @@ import razerManagerImg from '../assets/razermanager.webp';
 import schwarzschildImg from '../assets/schwarzschildlab.webp';
 
 const works = [
-    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://github.com/ZahinTapadar/schwarzschild-lab' },
+    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://zahintapadar.github.io/schwarzschild-lab/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: '#' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: ollamaImg, link: 'https://beautifyollama.vercel.app/' },
     { id: 2, title: 'Tech For Life', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: techForLifeImg, link: 'https://techforlife.vercel.app/' },
