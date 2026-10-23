@@ -27,27 +27,21 @@ The black hole uses the Schwarzschild metric, which describes spacetime around a
 
 I use geometric units:
 
-```
-G = c = 1
-```
+$$G = c = 1$$
 
-This makes the equations much less painful to work with. The black hole mass becomes `M`, and the event horizon is at:
+This makes the equations much less painful to work with. The black hole mass becomes $M$, and the event horizon is at:
 
-```
-r = 2M
-```
+$$r_s = 2M$$
 
 The photon sphere — where light can orbit the black hole — is at:
 
-```
-r = 3M
-```
+$$r_{ph} = 3M$$
 
 And the visible black-hole shadow is larger than both of those. Its critical radius is:
 
-```
-b_c = 3√3 M
-```
+$$b_c = 3\sqrt{3}\,M \approx 5.2\,M$$
+
+Here $b_c$ is an *impact parameter*: how far off-centre a ray of light is aimed. Any ray aimed closer than $b_c$ falls in, so the shadow looks bigger than the horizon itself.
 
 That is why a black hole does not just look like a perfectly sized dark disk. Light from behind it is bent, captured, or sent back toward the camera.
 
@@ -65,7 +59,11 @@ But that obviously does not work near a black hole.
 
 Instead, the ray is continuously accelerated toward the black hole. In the shader, I integrate the ray path with RK4 — Runge–Kutta fourth order integration.
 
-Very roughly, the ray acceleration looks like this:
+For light, the Schwarzschild geodesic can be written as an ordinary acceleration on a straight-line ray, where $h$ is the ray's angular momentum ($h = \lvert \mathbf{x} \times \dot{\mathbf{x}} \rvert$, which stays constant along the ray):
+
+$$\ddot{\mathbf{x}} = -\frac{3 M h^2}{r^5}\,\mathbf{x}$$
+
+In the shader it looks like this:
 
 ```glsl
 vec3 accel(vec3 x, float angularMomentumSquared) {
@@ -101,7 +99,15 @@ The next thing I added was an accretion disk.
 
 This is a thin disk of matter orbiting the black hole. Matter closer to the black hole moves faster and becomes hotter, so the inner region should be brighter.
 
-For the temperature profile, I use a Novikov–Thorne-inspired disk model. The important visual effect is that the disk is not uniformly orange. Its local temperature affects its colour, and hotter regions shift toward white or blue.
+For the temperature profile, I use a Novikov–Thorne-inspired disk model. The energy the disk radiates per unit area at radius $r$ goes as
+
+$$F(r) \propto \frac{1}{r^3}\left(1 - \sqrt{\frac{r_{in}}{r}}\right)$$
+
+which is zero at the inner edge $r_{in}$, peaks at $r = \tfrac{49}{36}\,r_{in}$, and falls off outside. A blackbody's flux grows as $T^4$, so the local temperature is
+
+$$T(r) = T_{peak} \left(\frac{F(r)}{F_{max}}\right)^{1/4}$$
+
+The important visual effect is that the disk is not uniformly orange. Its local temperature affects its colour, and hotter regions shift toward white or blue.
 
 The shader converts temperature into colour using a blackbody lookup table.
 
@@ -131,9 +137,7 @@ That is why the disk does not look symmetrical, even though the disk itself is c
 
 The effect is controlled by a redshift factor:
 
-```
-observed colour = local colour × gravitational shift × Doppler shift
-```
+$$\text{observed colour} = \text{local colour} \times \text{gravitational shift} \times \text{Doppler shift}$$
 
 The result is one of my favourite parts of the whole project. One side of the disk becomes intense and sharp, while the other fades into the darkness.
 
@@ -149,7 +153,11 @@ Planets, stars, debris clouds, and gas should not simply orbit in perfect circle
 
 For this, I wrote a small Rust engine and compiled it to WebAssembly.
 
-The engine integrates massive bodies using Schwarzschild timelike geodesics. That means objects can:
+The engine integrates massive bodies using Schwarzschild timelike geodesics. Written as an acceleration in proper time $\tau$, with $L = \lvert \mathbf{x} \times d\mathbf{x}/d\tau \rvert$:
+
+$$\frac{d^2\mathbf{x}}{d\tau^2} = -\frac{M\,\mathbf{x}}{r^3}\left(1 + \frac{3L^2}{r^2}\right)$$
+
+The first part is ordinary Newtonian gravity. The $3L^2/r^2$ term is the relativistic correction, and it is what makes orbits precess, puts the innermost stable orbit at $6M$, and lets bodies plunge. That means objects can:
 
 - Orbit and precess
 - Fall inward
@@ -221,19 +229,19 @@ The result is still procedural. It is not a map of the real sky, it uses no cata
 
 ## The Milky Way in 3D
 
-The galaxy is four populations of stars, each with a density in galactocentric coordinates (kiloparsecs, with the Sun at `R₀ = 8.2`, `z☉ = 0.02`):
+The galaxy is four populations of stars, each with a density in galactocentric coordinates (kiloparsecs, with the Sun at $R_0 = 8.2$, $z_\odot = 0.02$):
 
 | Component | Density |
 | --- | --- |
-| Thin disc | ρ ∝ e^−(R−R₀)/2.6 · e^−\|z\|/0.30, with a central hole 1 − e^−(R/3)² |
-| Thick disc | 0.12 · e^−(R−R₀)/2.0 · e^−\|z\|/0.9 |
-| Bar / bulge | 120 · exp(−½[(x/1.2)² + (y/0.45)² + (z/0.35)²]), rotated 27° |
-| Stellar halo | 0.0015 · ((R² + (z/0.7)² + 0.5²) / (R₀² + 0.5²))^−1.25 |
-| Dust | τ_V = 0.74 kpc⁻¹ · e^−(R−R₀)/3.2 · e^−\|z\|/0.12 · C |
+| Thin disc | $\rho \propto e^{-(R-R_0)/2.6}\, e^{-\lvert z\rvert/0.30}$, with a central hole $1 - e^{-(R/3)^2}$ |
+| Thick disc | $0.12\, e^{-(R-R_0)/2.0}\, e^{-\lvert z\rvert/0.9}$ |
+| Bar / bulge | $120 \exp\!\left(-\tfrac{1}{2}\left[(x/1.2)^2 + (y/0.45)^2 + (z/0.35)^2\right]\right)$, rotated 27° |
+| Stellar halo | $0.0015 \left(\dfrac{R^2 + (z/0.7)^2 + 0.5^2}{R_0^2 + 0.5^2}\right)^{-1.25}$ |
+| Dust | $\tau_V = 0.74\,\text{kpc}^{-1}\, e^{-(R-R_0)/3.2}\, e^{-\lvert z\rvert/0.12}\, C$ |
 
-Everything is relative to the local thin disc, normalised to `N₀ = 4.2 × 10⁷` stars per cubic kiloparsec near the Sun.
+Everything is relative to the local thin disc, normalised to $N_0 = 4.2 \times 10^7$ stars per cubic kiloparsec near the Sun.
 
-`C` is the interesting one. Real dust is clumpy: it sits in molecular clouds, not a smooth sheet. So the dust density is multiplied by a lognormal field, `C = exp(σG − σ²/2)`, where `G` is smooth, domain-warped noise. The `−σ²/2` keeps the *average* dust the same while letting individual clouds get very thick. The contrast `σ` is high near the galactic plane and small at high latitude, because that is where clouds live.
+$C$ is the interesting one. Real dust is clumpy: it sits in molecular clouds, not a smooth sheet. So the dust density is multiplied by a lognormal field, $C = \exp(\sigma G - \sigma^2/2)$, where $G$ is smooth, domain-warped noise. The $-\sigma^2/2$ keeps the *average* dust the same while letting individual clouds get very thick. The contrast $\sigma$ is high near the galactic plane and small at high latitude, because that is where clouds live.
 
 This is the only place noise is allowed in the whole sky. It perturbs a physical density; it never draws anything by itself.
 
@@ -243,15 +251,18 @@ Positions are only half the problem. The other half is the luminosity function: 
 
 I used a Kroupa mass function, the standard description of how many stars form at each mass:
 
-```
-dN/dm ∝ m^−1.3     0.08–0.5 M☉
-dN/dm ∝ m^−2.3     0.5–1 M☉
-dN/dm ∝ m^−4.8     1–60 M☉   (thin disc only)
-```
+$$
+\frac{dN}{dm} \propto
+\begin{cases}
+m^{-1.3} & 0.08\text{–}0.5\,M_\odot \\
+m^{-2.3} & 0.5\text{–}1\,M_\odot \\
+m^{-4.8} & 1\text{–}60\,M_\odot \quad \text{(thin disc only)}
+\end{cases}
+$$
 
-The steep `m^−4.8` tail is the thin disc's *present-day* mass function: it keeps forming stars, but massive stars die young, so few of them are around at any moment. The old populations (thick disc, bulge, halo) simply stop at a 0.95 M☉ turn-off; everything heavier burnt out long ago.
+The steep $m^{-4.8}$ tail is the thin disc's *present-day* mass function: it keeps forming stars, but massive stars die young, so few of them are around at any moment. The old populations (thick disc, bulge, halo) simply stop at a $0.95\,M_\odot$ turn-off; everything heavier burnt out long ago.
 
-Mass becomes absolute magnitude through a main-sequence mass–luminosity law, `L ∝ m^3.5`, which gives `M_V = 4.83 − 8.75 log m`. On top of that, 0.3–0.6% of stars are giants with `M_V` between −1.5 and 1.5, because a few bright giants dominate what you see at large distances.
+Mass becomes absolute magnitude through a main-sequence mass–luminosity law, $L \propto m^{3.5}$, which gives $M_V = 4.83 - 8.75 \log_{10} m$. On top of that, 0.3–0.6% of stars are giants with $M_V$ between $-1.5$ and $1.5$, because a few bright giants dominate what you see at large distances.
 
 ## Following one line of sight
 
@@ -274,13 +285,13 @@ for (int k = 0; k < NSHELL; k++) {
 }
 ```
 
-That gives everything needed to answer one question: *how many stars per steradian are brighter than magnitude m in this direction?* Add up every shell, shift the luminosity function by that shell's distance modulus and extinction, and read off the cumulative count. The `r²` is why distant parts of the galaxy matter: a thin shell far away covers a lot of volume.
+That gives everything needed to answer one question: *how many stars per steradian are brighter than magnitude m in this direction?* Add up every shell, shift the luminosity function by that shell's distance modulus and extinction, and read off the cumulative count. The $r^2$ is why distant parts of the galaxy matter: a thin shell far away covers a lot of volume.
 
 ## Checking it against the real sky
 
 This is the part I did not expect to work.
 
-Because the whole model is a handful of equations, I ported them to JavaScript and integrated star counts over the entire sky. The first run used a guessed normalisation and came out about 2.5× too high at every magnitude. The *shape* was already right, though, so the only fix was the overall number of stars per cubic kiloparsec. With `N₀ = 4.2 × 10⁷`:
+Because the whole model is a handful of equations, I ported them to JavaScript and integrated star counts over the entire sky. The first run used a guessed normalisation and came out about 2.5× too high at every magnitude. The *shape* was already right, though, so the only fix was the overall number of stars per cubic kiloparsec. With $N_0 = 4.2 \times 10^7$:
 
 | Brighter than | Model | Real sky |
 | --- | --- | --- |
@@ -311,7 +322,11 @@ Stars are drawn in magnitude bins, and each bin gets its own grid level so that 
 | 8.5 to 10.5 | 9 | 262,144 |
 | 10.5 to 12.5 | 10 | 1,048,576 |
 
-For each cell near the pixel, the expected count `λ` comes from the line-of-sight integral above times the cell's solid angle. The actual number of stars is a Poisson draw, done with an inverse CDF so there is no loop:
+For each cell near the pixel, the expected count $\lambda$ comes from the line-of-sight integral above times the cell's solid angle. The actual number of stars is a Poisson draw,
+
+$$P(k \text{ stars}) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+
+done with an inverse CDF so there is no loop:
 
 ```glsl
 float e = exp(-lam);
@@ -322,7 +337,7 @@ int count = int(h.x > e)
 
 That caps a cell at three stars. Any expected stars beyond that are not thrown away; their average brightness is added back as diffuse light.
 
-Each star then picks its own story. Its magnitude is drawn inside the bin from `dN/dm ∝ 10^(0.3m)`, and then the shader works backwards: which shell and population most likely produced a star that bright? That gives its distance, its extinction, whether it is a main-sequence star or a giant, its mass and its temperature.
+Each star then picks its own story. Its magnitude is drawn inside the bin from $dN/dm \propto 10^{0.3m}$, and then the shader works backwards: which shell and population most likely produced a star that bright? That gives its distance, its extinction, whether it is a main-sequence star or a giant, its mass and its temperature.
 
 ## Seeds that actually reproduce
 
@@ -336,7 +351,7 @@ The galaxy's orientation, the density model and every parameter stay fixed. The 
 
 ## Turning stars into pixels
 
-A star's flux is `10^(−0.4(m − 4.5))`, its colour is a blackbody at its temperature, and dust reddens it by `E(B−V) = A_V / 3.1`.
+A star's flux is $10^{-0.4(m - 4.5)}$, its colour is a blackbody at its temperature, and dust reddens it by $E(B-V) = A_V / 3.1$.
 
 The tricky part was lensing. Near the photon ring, one pixel can cover a long, thin sliver of sky. If you draw stars in sky space, they smear into streaks. So each star is drawn as a round spot about 1.6 pixels wide in *screen* space, by pushing its sky offset through the inverse of the screen-to-sky Jacobian:
 
@@ -354,11 +369,9 @@ Stars fainter than the magnitude limit, or smaller than a pixel, are not lost ei
 
 The complete radiance for one direction is:
 
-```
-I = I_stars + I_unresolved · e^−τ + I_DGL + I_emission + I_scattered + I_galaxies
-```
+$$I = I_\text{stars} + I_\text{unresolved}\, e^{-\tau} + I_\text{DGL} + I_\text{emission} + I_\text{scattered} + I_\text{galaxies}$$
 
-Dust appears twice. First as `e^−τ`, dimming everything behind it. Then as diffuse galactic light (DGL): the dust also scatters the galaxy's own starlight back toward you. I computed the mean starlight of the model (2,250 flux units per steradian) once in JavaScript, and the shader uses single scattering, `I ∝ 0.3 · J · (1 − e^−τ)`.
+Dust appears twice. First as $e^{-\tau}$, dimming everything behind it. Then as diffuse galactic light (DGL): the dust also scatters the galaxy's own starlight back toward you. I computed the mean starlight of the model (2,250 flux units per steradian) once in JavaScript, and the shader uses single scattering, $I \propto 0.3\, J \left(1 - e^{-\tau}\right)$.
 
 That combination is what finally killed the grey fog. Dust lanes are dark because they block, with a faint glow because they scatter, instead of being a flat grey layer painted over the stars.
 
@@ -368,11 +381,11 @@ That combination is what finally killed the grey fog. Dust lanes are dark becaus
 
 In the old version, nebulae were decoration. In this one, a nebula has to be earned.
 
-Open clusters are drawn from the *young* disc, which is much thinner than the stellar disc (60 pc scale height), with more of them where the clouds are dense. Each cluster gets an age, a number of stars and a distance. Its most massive surviving star comes from the main-sequence turn-off for its age, `m_max ≈ (10,000 Myr / age)^0.4`. The brightest eight members are drawn as individual stars, and the rest become a soft Plummer-profile glow.
+Open clusters are drawn from the *young* disc, which is much thinner than the stellar disc (60 pc scale height), with more of them where the clouds are dense. Each cluster gets an age, a number of stars and a distance. Its most massive surviving star comes from the main-sequence turn-off for its age, $m_{max} \approx (10{,}000\,\text{Myr} / \text{age})^{0.4}$. The brightest eight members are drawn as individual stars, and the rest become a soft Plummer-profile glow.
 
 Then the conditions:
 
-- **HII region** (red, glowing hydrogen): only if the cluster has a star above 15 M☉, is younger than 8 Myr, *and* sits inside a dense cloud (`C > 1.3`). Its size follows the Strömgren radius, which grows with the cluster's ionising output. Its surface brightness is 16.5–19.5 mag/arcsec².
+- **HII region** (red, glowing hydrogen): only if the cluster has a star above $15\,M_\odot$, is younger than 8 Myr, *and* sits inside a dense cloud ($C > 1.3$). Its size follows the Strömgren radius, which grows with the cluster's ionising output. Its surface brightness is 16.5–19.5 mag/arcsec².
 - **Reflection nebula** (blue): needs a B star, a cloud (`C > 1.1`), and *no* ionising star. It is lit with inverse-square falloff from that star and favours blue, because dust scatters blue light more.
 - Otherwise: just a cluster of stars.
 
@@ -384,9 +397,9 @@ The shapes inside a nebula still come from noise. That part is a visual approxim
 
 ## Galaxies are faint, actually
 
-The background galaxies follow Euclidean number counts, `N(<m) = 1500 sr⁻¹ · 10^(0.6(m − 15))`, modulated by a lognormal "large-scale structure" field so they cluster. Dust in our own galaxy hides them behind `10^(−0.6 · A_B)`, so there are almost none near the plane.
+The background galaxies follow Euclidean number counts, $N(<m) = 1500\,\text{sr}^{-1} \cdot 10^{0.6(m - 15)}$, modulated by a lognormal "large-scale structure" field so they cluster. Dust in our own galaxy hides them behind $10^{-0.6 A_B}$, so there are almost none near the plane.
 
-Each one gets a type and shape from its hash: Sérsic `n = 4` ellipticals, or exponential discs with random inclinations and spiral arms, star-forming knots, and a dust lane that strengthens as the disc turns edge-on. Sizes follow `R ∝ L^0.5`.
+Each one gets a type and shape from its hash: Sérsic $n = 4$ ellipticals, or exponential discs with random inclinations and spiral arms, star-forming knots, and a dust lane that strengthens as the disc turns edge-on. Sizes follow $R \propto L^{0.5}$.
 
 And here the calibration bit back. At realistic counts, a galaxy at 10th magnitude is about one arcminute across: around a third of a pixel at the default zoom. So galaxies render the way they look on the real sky, as faint smudges you only find by zooming in. I left it that way. It is the honest result.
 

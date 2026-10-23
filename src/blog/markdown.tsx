@@ -3,6 +3,8 @@ import React from 'react';
 // A small Markdown renderer for the blog: headings, paragraphs, lists, block
 // quotes, fenced code, images, rules, and inline code / links / bold / italic.
 // Enough for posts written by hand, without pulling in a dependency.
+// Math is TeX: $…$ inline and $$…$$ on its own lines. It is emitted as \(…\)
+// and \[…\] text for MathJax to typeset in the browser (see Blog.tsx).
 
 export interface Post {
     slug: string;
@@ -47,8 +49,8 @@ export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-'
 
 function inline(text: string, key = 0): React.ReactNode[] {
     const out: React.ReactNode[] = [];
-    // code | image | link | bold | italic
-    const re = /`([^`]+)`|!\[([^\]]*)\]\(([^)\s]+)\)|\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
+    // code | image | link | bold | italic | math
+    const re = /`([^`]+)`|!\[([^\]]*)\]\(([^)\s]+)\)|\[([^\]]+)\]\(([^)\s]+)\)|\*\*([^*]+)\*\*|\*([^*]+)\*|\$([^$\n]+)\$/g;
     let last = 0, m: RegExpExecArray | null, k = key;
     while ((m = re.exec(text))) {
         if (m.index > last) out.push(text.slice(last, m.index));
@@ -63,6 +65,7 @@ function inline(text: string, key = 0): React.ReactNode[] {
             );
         } else if (m[6] !== undefined) out.push(<strong key={k++}>{inline(m[6], k * 100)}</strong>);
         else if (m[7] !== undefined) out.push(<em key={k++}>{inline(m[7], k * 100)}</em>);
+        else if (m[8] !== undefined) out.push(<span key={k++} className="post-math-inline">{`\\(${m[8]}\\)`}</span>);
         last = re.lastIndex;
     }
     if (last < text.length) out.push(text.slice(last));
@@ -81,7 +84,7 @@ export function renderMarkdown(
     const headings: Heading[] = [];
     let i = 0, key = 0;
     const isBlockStart = (l: string) =>
-        /^(#{1,4} |```|> |[-*] |\d+\. |---$|::|!\[|\|)/.test(l) || l.trim() === '';
+        /^(#{1,4} |```|\$\$|> |[-*] |\d+\. |---$|::|!\[|\|)/.test(l) || l.trim() === '';
 
     while (i < lines.length) {
         const line = lines[i];
@@ -98,6 +101,20 @@ export function renderMarkdown(
                     <code>{code.join('\n')}</code>
                 </pre>,
             );
+            continue;
+        }
+        if (line.startsWith('$$')) {
+            // $$ on its own lines around the TeX, or $$ … $$ on one line
+            const tex: string[] = [];
+            const rest = line.slice(2);
+            if (rest.trim().endsWith('$$')) { tex.push(rest.trim().slice(0, -2)); i++; }
+            else {
+                if (rest.trim()) tex.push(rest);
+                i++;
+                while (i < lines.length && !lines[i].trim().endsWith('$$')) tex.push(lines[i++]);
+                if (i < lines.length) { tex.push(lines[i].trim().slice(0, -2)); i++; }
+            }
+            nodes.push(<div key={key++} className="post-math">{`\\[${tex.join('\n')}\\]`}</div>);
             continue;
         }
         const h = line.match(/^(#{1,4}) (.*)$/);

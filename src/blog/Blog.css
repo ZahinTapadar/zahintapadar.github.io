@@ -371,3 +371,25 @@
   color: #ffffff;
   white-space: nowrap;
 }
+
+/* Math (typeset by MathJax). Display equations scroll sideways on narrow
+   screens instead of overflowing; raw TeX stays hidden until it is typeset. */
+.post-math {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  color: #e6e6e6;
+}
+
+.post-math mjx-container[display="true"] {
+  margin: 0.25rem 0 !important;
+}
+
+.post-math-inline mjx-container {
+  color: #e6e6e6;
+}
+
+.post-body:not(.math-ready) .post-math,
+.post-body:not(.math-ready) .post-math-inline {
+  visibility: hidden;
+}
