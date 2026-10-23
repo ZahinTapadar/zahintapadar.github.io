@@ -8,7 +8,6 @@ import iconFolder from '../assets/project.jpg';
 import iconStar from '../assets/icon_star.jpg';
 import iconblog from '../assets/blog.png';
 import fadeImg from '../assets/fade.jpg';
-import wallImg from '../assets/wall.png';
 import mikuImg from '../assets/b&wmiku.jpeg';
 import projectsImg from '../assets/projects.jpeg';
 import endlineImg from '../assets/endline.png';
@@ -227,8 +226,8 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
                     <img
-                        src={wallImg}
-                        alt="Experience Graphic"
+                        src={lilyImg}
+                        alt="Spider lily"
                         className="minimal-aesthetic-img"
                         style={{ maxWidth: '400px' }}
                     />
@@ -279,14 +278,6 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                 </div>
 
                 <section className="minimal-section" style={{ marginBottom: 0 }}>
-                    <div style={{ margin: '0 0 2rem 0', display: 'flex', justifyContent: 'center' }}>
-                        <img
-                            src={lilyImg}
-                            alt="Spider lily"
-                            className="minimal-aesthetic-img"
-                            style={{ maxWidth: '400px' }}
-                        />
-                    </div>
                     <TerminalPanel cmd="./contact">
                         <p className="term-text">
                             if you want to collaborate, discuss ideas, or just point out something i got wrong, feel free to reach out:
