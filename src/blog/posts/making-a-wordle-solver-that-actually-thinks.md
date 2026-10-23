@@ -176,9 +176,132 @@ If one guess creates a lot of small, balanced buckets, it is good. If another cr
 
 My first description of this was "minimax": pick the guess whose worst outcome is smallest. That is what the project called itself, right up until I wrote this post.
 
-But when I went back to the scoring code for this post, it turned out to be doing something slightly different, and more interesting.
+When I went back to the scoring code, it turned out to be doing something slightly different, and much more interesting. It was measuring *information*. To explain what that means, and why one strange line of C is the whole algorithm, I have to start from zero. No maths background needed.
 
-The score adds up a precomputed value for each bucket:
+# The math, from zero
+
+## A guess sorts the answers into piles
+
+Imagine writing all 2,309 possible answers on cards. Before you type a guess, you can go through the cards one by one and work out what colours each answer *would* give you, then put cards with the same colours in the same pile.
+
+That is exactly what the bucket loop above does. For `RAISE`, the 2,309 cards land in 132 different piles. These are the biggest:
+
+| Colours for RAISE | Answers in that pile | Share of all answers | A few of them |
+| --- | --- | --- | --- |
+| `0 0 0 0 0` | 167 | 7.2% | BLOCK, BLOND, BLOOD, BLOOM |
+| `0 0 0 0 1` | 120 | 5.2% | BEECH, BEEFY, BEGET, BEGUN |
+| `0 0 1 0 0` | 107 | 4.6% | BIDDY, BIGOT, BILLY, BINGO |
+| `1 0 0 0 0` | 103 | 4.5% | BLURB, BLURT, BROOD, BROOK |
+| `1 0 0 0 1` | 102 | 4.4% | BERET, BERRY, BERTH, BLUER |
+| `0 1 0 0 0` | 91 | 3.9% | ABACK, ABBOT, ABOUT, ADAPT |
+
+28 of the piles hold a single word. If you land in one of those, you know the answer.
+
+When the real colours come back, you find out which pile you are in, and every other card goes in the bin. That is all `filter_possible` does: keep the pile that matches.
+
+So the question "which word should I guess?" becomes:
+
+> Which guess sorts the cards into piles that are as small as possible?
+
+## "Small piles" is not one number
+
+The trouble is that "small" can mean different things. Take a toy game with only 8 possible answers, and four different guesses that split them like this:
+
+- Guess A: two piles of 4
+- Guess B: four piles of 2
+- Guess C: a pile of 7 and a pile of 1
+- Guess D: a pile of 5 and three piles of 1
+
+B is obviously the best and C is obviously bad. But is D better than A? D usually leaves you with 5 cards, but sometimes you win on the spot. We need one number that scores a split fairly. That number comes from counting questions.
+
+## Measuring uncertainty in halvings
+
+Play twenty questions with 8 cards. If every yes/no question cuts the pile exactly in half, you go 8 → 4 → 2 → 1. Three questions.
+
+With 16 cards it takes four questions. With 1,024 cards, ten. Every time the pile doubles, you need one more question. The number of halvings from N cards down to 1 is called **log₂ N**, "log base 2 of N", and each halving is one **bit**.
+
+| Cards | Halvings needed (log₂) |
+| --- | --- |
+| 2 | 1 |
+| 8 | 3 |
+| 1,024 | 10 |
+| 2,309 | 11.17 |
+
+2,309 is not a power of two, so the answer is not a whole number, and that is fine. It just means 2,309 cards hold about 11.17 bits of uncertainty. **Solving Wordle means getting rid of 11.17 bits.** Every guess removes some of them.
+
+## How much did one result tell me?
+
+If a guess takes you from N cards down to a pile of n, the number of halvings left went from log₂ N to log₂ n. The difference is what you learned:
+
+```
+bits learned = log₂ N − log₂ n = log₂(N / n)
+```
+
+With `RAISE`:
+
+- All gray (2,309 → 167): 3.79 bits
+- Only the A is yellow (2,309 → 91): 4.67 bits
+- Any pile of 1 (2,309 → 1): 11.17 bits, the whole puzzle in one go
+
+Rare results teach you more. That is the key idea of information theory: **information is surprise**. Since every answer is equally likely, the chance of landing in a pile of n is p = n / N, so the same formula can be written as log₂(1 / p). Something with a 1-in-2 chance is worth 1 bit, 1-in-4 is 2 bits, 1-in-2,309 is 11.17 bits.
+
+## Expected information: entropy
+
+Before guessing, you do not know which pile you will land in. But you know the chance of each one, so you can work out the *average* number of bits the guess will give you: each pile's bits, weighted by how likely you are to land there.
+
+```
+H = Σ (nₖ / N) · log₂(N / nₖ)
+```
+
+The Σ just means "add this up over every pile k". This average is called **entropy**, written H. Here are the toy guesses again:
+
+| Guess | Piles | Expected bits (H) |
+| --- | --- | --- |
+| B | 2, 2, 2, 2 | 2.00 |
+| D | 5, 1, 1, 1 | 1.55 |
+| A | 4, 4 | 1.00 |
+| C | 7, 1 | 0.54 |
+
+So D really is better than A: its lucky wins are worth more than A's even split.
+
+For the real game:
+
+| Guess | Expected bits |
+| --- | --- |
+| ROATE | 5.885 |
+| RAISE | 5.878 |
+| SLATE | 5.856 |
+| FUZZY | 2.304 |
+
+`FUZZY` is a bad first guess because 58% of the time (1,349 answers) it comes back all gray, which tells you very little.
+
+There is also a ceiling. A guess can only produce 243 different colour patterns, so even a perfect split could give at most log₂ 243 = **7.92 bits**. Since the puzzle holds 11.17, no guess can always pin the answer down on its own. You need at least two rounds of colours before you can be sure, which is why good solvers average around three to four guesses, not two.
+
+## From entropy to one line of C
+
+Here is the part that surprised me. The solver never computes a probability or divides anything. It just adds up `n · log₂ n`. That turns out to be the same thing.
+
+Split the log in the entropy formula into two pieces:
+
+```
+H = Σ (n/N) · log₂(N/n)
+  = Σ (n/N) · (log₂ N − log₂ n)
+  = log₂ N · Σ (n/N)  −  (1/N) · Σ n · log₂ n
+```
+
+The piles always add back up to all N cards, so Σ (n/N) = 1:
+
+```
+H = log₂ N − (1/N) · Σ n · log₂ n
+```
+
+On a given turn, N is the same for every guess the solver is comparing. So the only part that differs between guesses is Σ n · log₂ n, and it is *subtracted*. The smaller it is, the more information the guess gives:
+
+> maximise H  ⇔  minimise Σ n · log₂ n
+
+In the toy game, B scores 8, A scores 16, C scores 19.65, and a guess that tells you nothing (one pile of 8) scores 24. Big piles are expensive, and they get more expensive faster than they grow: a pile twice as big costs more than twice as much.
+
+That is exactly the score the C code adds up:
 
 ```c
 for (int k = 0; k < 243; k++) {
@@ -188,7 +311,9 @@ for (int k = 0; k < 243; k++) {
 }
 ```
 
-And the lookup table is built like this:
+## Logarithms without floating point
+
+`lookup[n]` has to be n · log₂ n, but computing logs with decimals in the innermost loop is slow. So the table is built once, using integers only:
 
 ```c
 for (int i = 1; i < 13000; i++) {
@@ -197,21 +322,46 @@ for (int i = 1; i < 13000; i++) {
 }
 ```
 
-`31 - __builtin_clz(i)` is the integer part of `log₂ i`, read straight off the leading zeros. The second term linearly interpolates between powers of two for the fractional part. Both are multiplied by 256, so this is a fixed-point approximation of:
+It works in two steps. Take n = 167.
+
+1. **The whole part.** In binary, 167 is `10100111`: eight digits, so it sits between 2⁷ = 128 and 2⁸ = 256, and log₂ 167 is 7-point-something. `__builtin_clz` counts the leading zeros of a 32-bit number, so `31 − clz` is the position of the highest 1 bit: 7.
+2. **The fraction.** Between 128 and 256 the code draws a straight line: 167 is (167 − 128) / 128 = 0.305 of the way along. So log₂ 167 ≈ 7.305. The real value is 7.384.
+
+Both parts are multiplied by 256 so the fraction survives as a whole number. That is *fixed point*: storing 7.305 as 1,870 and remembering the scale. Then:
 
 ```
-L[n] ≈ 256 · n · log₂ n
+L[167] = 167 × (7 × 256 + 78) = 312,290   ≈ 256 · 167 · log₂ 167
 ```
 
-So the score is really `Σ n · log₂ n` over the buckets. Minimising that is the same as **maximising the entropy** of the feedback pattern:
+The straight line always sits slightly under the real curve, so the estimate is never too high, is exact at powers of two, and is off by at most 0.09 bits. Every guess gets the same kind of error, so the ranking almost never changes. Almost: by true entropy `CRATE` (5.835 bits) edges out `IRATE` (5.833), but the integer version ranks `IRATE` first. That is the price of never touching a float.
+
+## Reading the number on screen
+
+When the app shows `score 2843242` for `RAISE`, that is:
 
 ```
-H = log₂ N − (1/N) · Σ nₖ · log₂ nₖ
+3,093,242   Σ L[n] over RAISE's 132 piles  (256 × Σ n·log₂ n, integer logs)
+−  200,000   RAISE could still be the answer
+−   50,000   RAISE is on the official answer list
+= 2,843,242
 ```
 
-In plain words: it does not just make the worst bucket small. It picks the guess that tells you the most *on average*, measured in bits. The integer table means there is not a single floating-point `log` in the hot loop.
+Lower is better. The bonuses are explained further down.
 
-I still like the name. But the honest description is: it is an information-theoretic solver, and minimax happens to agree with it on the first move.
+## Why not just minimise the worst pile?
+
+There are three natural ways to judge a split, and they disagree:
+
+| Guess | Worst pile (minimax) | Average pile you land in | Expected bits |
+| --- | --- | --- | --- |
+| RAISE | **167** | 60.7 | 5.878 |
+| ROATE | 194 | **60.1** | **5.885** |
+| SLATE | 221 | 71.3 | 5.856 |
+| ARISE | **167** | 63.5 | 5.821 |
+
+Minimax only looks at the single worst pile and ignores everything else. The average pile size is closer, but entropy has one property the others do not: **bits add up.** Information from one guess plus information from the next equals the total you needed. That makes it the right thing to optimise one step at a time.
+
+I still like the name minimax. But the honest description is: it is an information-theoretic solver, and minimax happens to agree with it on the first move.
 
 # The opening move
 
@@ -223,14 +373,14 @@ With every answer still possible, the best guess is `RAISE`.
 
 The next best openers are close behind:
 
-| Rank | Guess | Buckets | Largest bucket |
-| --- | --- | --- | --- |
-| 1 | RAISE | 132 | 167 |
-| 2 | SLATE | 146 | 221 |
-| 3 | IRATE | 124 | 193 |
-| 4 | CRATE | 148 | 246 |
-| 5 | TRACE | 150 | 246 |
-| 6 | ARISE | 123 | 167 |
+| Rank | Guess | Buckets | Largest bucket | Expected bits |
+| --- | --- | --- | --- | --- |
+| 1 | RAISE | 132 | 167 | 5.878 |
+| 2 | SLATE | 146 | 221 | 5.856 |
+| 3 | IRATE | 124 | 193 | 5.833 |
+| 4 | CRATE | 148 | 246 | 5.835 |
+| 5 | TRACE | 150 | 246 | 5.830 |
+| 6 | ARISE | 123 | 167 | 5.821 |
 
 `SLATE` makes more buckets than `RAISE`, but less evenly. That is exactly the kind of difference the `n · log₂ n` score is sensitive to.
 
@@ -269,6 +419,23 @@ I wanted to know what that compromise actually costs, so I wrote a small harness
 So the bonus does what I wanted: far more games end in two or three guesses, and the average gets better. But it also makes the solver greedy. On words like `GONER`, where many answers share the same pattern (`_O_ER`), it keeps guessing words that *could* be the answer instead of one that splits the group, and 12 games run past Wordle's six-guess limit.
 
 Without the bonus, it never needs more than five guesses. That is a real trade-off, and now that I can measure it, I can tune it properly instead of guessing.
+
+## What the bonus is worth, in bits
+
+The entropy formula explains *why* the bonus turns greedy. The score is about 256 × Σ n · log₂ n, and H = log₂ N − (Σ n · log₂ n) / N. So a bonus of B points is worth B / (256 × N) bits.
+
+Every word that could still be the answer is also on the official list, so it collects both bonuses: 250,000 points.
+
+| Answers left | What 250,000 points is worth | Most a guess could ever give (log₂ N) |
+| --- | --- | --- |
+| 2,309 | 0.42 bits | 11.17 bits |
+| 137 | 7.13 bits | 7.10 bits |
+| 91 | 10.73 bits | 6.51 bits |
+| 20 | 48.83 bits | 4.32 bits |
+
+On the first move the bonus is a gentle nudge. But the same fixed number of points is worth more and more as N shrinks. Once 137 or fewer answers are left, it is worth more than any guess could possibly tell you, so a word that cannot be the answer will never be chosen again, however cleverly it splits the piles. That is exactly what happens on `GONER`.
+
+A fairer bonus would scale with N. Guessing a candidate gives you a 1-in-N chance of winning right now, and that chance is what should be weighed against the bits you give up.
 
 # Why Lua and C?
 
@@ -389,6 +556,8 @@ Here is a real game. The hidden word is `PLANT`. After `RAISE` comes back as `0 
 
 ![Solved in three: PLANT](/blog/wortraum/solved.webp)
 
+In bits: `RAISE` took 2,309 answers down to 91, which is log₂(2,309 / 91) = 4.67 bits. `FLOAT` took 91 down to 1, which is log₂ 91 = 6.51 bits. Together that is 11.17 bits, exactly the uncertainty the game started with. The bits really do add up.
+
 Eventually, only one answer remains.
 
 # What I learned
@@ -410,7 +579,8 @@ The project is still small, but I like that it connects a lot of things I wanted
 - Game logic
 - Bitmasks
 - Base-3 encoding
-- Entropy, and fixed-point logarithms
+- Information theory: bits, surprise and entropy
+- Fixed-point logarithms
 - LuaJIT FFI
 - Native C performance
 - Freestanding WebAssembly
