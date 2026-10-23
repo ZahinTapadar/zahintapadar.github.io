@@ -126,7 +126,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: normal;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Playfair Display', Georgia, serif;
 }
 
 a {
@@ -136,13 +136,13 @@ a {
 
 /* ── Typography Utility Classes ── */
 .font-display {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Playfair Display', Georgia, serif;
   font-weight: 800;
   letter-spacing: var(--tracking-tight);
 }
 
 .font-heading {
-  font-family: 'Outfit', system-ui, sans-serif;
+  font-family: 'Playfair Display', Georgia, serif;
   font-weight: 600;
   letter-spacing: var(--tracking-tight);
 }
