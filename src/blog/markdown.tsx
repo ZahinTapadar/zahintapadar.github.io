@@ -14,6 +14,7 @@ export interface Post {
     repo?: string;
     description?: string;
     cover?: string;
+    meta: Record<string, string>;      // every front-matter field, for post-specific extras
     body: string;
 }
 
@@ -37,6 +38,7 @@ export function parsePost(slug: string, raw: string): Post {
         repo: meta.repo,
         description: meta.description,
         cover: meta.cover,
+        meta,
         body: m ? raw.slice(m[0].length) : raw,
     };
 }

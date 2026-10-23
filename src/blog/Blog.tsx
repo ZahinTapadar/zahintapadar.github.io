@@ -8,23 +8,26 @@ import { renderMarkdown, readingTime, type Post } from './markdown';
 const formatDate = (d: string) =>
     d ? new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase() : '';
 
-// The live simulator, loaded only on request: it runs a full-screen GPU ray
-// tracer, which a reader scrolling past should not pay for.
-const SimulatorEmbed: React.FC<{ src: string }> = ({ src }) => {
+// A post's live demo, loaded only on request: demos can be heavy (a GPU ray
+// tracer, a WebAssembly solver), and a reader scrolling past should not pay for
+// them. Front matter: `project` (URL), `cover`, `demo_cmd`, `demo_note`.
+const DemoEmbed: React.FC<{ post: Post }> = ({ post }) => {
     const [on, setOn] = useState(false);
+    if (!post.project) return null;
+    const cmd = post.meta.demo_cmd ?? `./${post.slug}`;
     return (
         <figure className="post-embed">
             {on ? (
-                <iframe src={src} title="Schwarzschild Lab" allow="fullscreen" loading="lazy" />
+                <iframe src={post.project} title={post.title} allow="fullscreen" loading="lazy" />
             ) : (
                 <button className="post-embed-cover" onClick={() => setOn(true)}
-                    style={{ backgroundImage: 'url(/blog/schwarzschild-lab/gargantua.webp)' }}>
-                    <span className="post-embed-play">[ run ./schwarzschild-lab ]</span>
-                    <span className="post-embed-note">loads a live WebGL2 ray tracer · drag to orbit, scroll to zoom</span>
+                    style={post.cover ? { backgroundImage: `url(${post.cover})` } : undefined}>
+                    <span className="post-embed-play">[ run {cmd} ]</span>
+                    {post.meta.demo_note && <span className="post-embed-note">{post.meta.demo_note}</span>}
                 </button>
             )}
             <figcaption>
-                the real thing, running in your browser · <a href={src} target="_blank" rel="noopener noreferrer">open full screen ↗</a>
+                the real thing, running in your browser · <a href={post.project} target="_blank" rel="noopener noreferrer">open full screen ↗</a>
             </figcaption>
         </figure>
     );
@@ -59,7 +62,7 @@ const PostIndex: React.FC = () => (
 
 const PostView: React.FC<{ post: Post }> = ({ post }) => {
     const { nodes, headings } = useMemo(
-        () => renderMarkdown(post.body, { simulator: () => post.project ? <SimulatorEmbed src={post.project} /> : null }),
+        () => renderMarkdown(post.body, { demo: () => <DemoEmbed post={post} />, simulator: () => <DemoEmbed post={post} /> }),
         [post],
     );
     const i = posts.indexOf(post);

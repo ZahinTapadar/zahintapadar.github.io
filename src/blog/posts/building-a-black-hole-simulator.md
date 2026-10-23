@@ -7,6 +7,8 @@ project: https://zahintapadar.github.io/schwarzschild-lab/
 repo: https://github.com/ZahinTapadar/schwarzschild-lab
 description: A devlog on Schwarzschild Lab, a real-time black hole simulator in the browser: per-pixel light-ray tracing in WebGL2 and a Rust/WebAssembly orbit engine.
 cover: /blog/schwarzschild-lab/gargantua.webp
+demo_cmd: ./schwarzschild-lab
+demo_note: loads a live WebGL2 ray tracer · drag to orbit, scroll to zoom
 ---
 
 I wanted to make a black hole simulation that looks beautiful, but also does not completely lie about the physics.
