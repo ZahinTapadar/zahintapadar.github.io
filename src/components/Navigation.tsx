@@ -35,6 +35,7 @@ const Navigation: React.FC<NavigationProps> = ({ onToggleMode }) => {
             <div className="nav-island__links">
                 <a href="#work" onClick={(e) => handleScrollTo(e, 'work')}>Work</a>
                 <a href="#experience" onClick={(e) => handleScrollTo(e, 'experience')}>Experience</a>
+                <a href="/blog/">Blog</a>
                 {onToggleMode && (
                     <button
                         onClick={onToggleMode}

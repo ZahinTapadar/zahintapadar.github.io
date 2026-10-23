@@ -12,8 +12,8 @@ import razerManagerImg from '../assets/razermanager.webp';
 import schwarzschildImg from '../assets/schwarzschildlab.webp';
 import luaWordleImg from '../assets/luawordle.webp';
 
-const works = [
-    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://zahintapadar.github.io/schwarzschild-lab/' },
+const works: { id: number; title: string; year: string; roles: { name: string; value: string }[]; image: string; link: string; post?: string }[] = [
+    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
     { id: 9, title: 'Lua Wordle Solver', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: luaWordleImg, link: 'https://zahintapadar.github.io/Wordle-Algorithm/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: 'https://github.com/ZahinTapadar/adb-app-manager' },
     { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: [{ name: 'Experience', value: 'Built' }], image: razerManagerImg, link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' },
@@ -68,6 +68,12 @@ const WorkBento = () => {
                                         <span style={{ color: 'var(--color-charcoal)', fontWeight: 500 }}>{r.value}</span>
                                     </div>
                                 ))}
+                                {work.post && (
+                                    <div className="bento-role-row font-mono" style={{ fontSize: 'var(--font-size-small)' }}>
+                                        <span style={{ color: 'var(--color-text-secondary)' }}>Devlog</span>
+                                        <a href={work.post} style={{ color: 'var(--color-clay)', fontWeight: 500, textDecoration: 'none' }}>Read the build log →</a>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

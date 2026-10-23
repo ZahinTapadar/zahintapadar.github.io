@@ -19,13 +19,14 @@ import TechTree from './TechTree';
 import TerminalPanel, { TermPrompt } from './TerminalPanel';
 import StackOverflow from './games/StackOverflow';
 import GarbageCollector from './games/GarbageCollector';
+import { posts } from '../blog/posts';
 
 interface MinimalPortfolioProps {
     onToggleMode: () => void;
 }
 
-const works: { id: number; title: string; year: string; roles: string; detail?: string; link: string }[] = [
-    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: 'Built', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/' },
+const works: { id: number; title: string; year: string; roles: string; detail?: string; link: string; post?: string }[] = [
+    { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: 'Built', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
     { id: 9, title: 'Lua Wordle Solver', year: '2026', roles: 'Built', detail: 'lua + c minimax core', link: 'https://zahintapadar.github.io/Wordle-Algorithm/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: 'Developed', link: 'https://github.com/ZahinTapadar/adb-app-manager' },
     { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: 'Built', link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' },
@@ -108,6 +109,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         </div>
                     </div>
                     <nav className="minimal-nav">
+                        <a href="/blog/" style={{ color: '#e5c07b' }}>[blog]</a>
                         <button onClick={onToggleMode}>[rich_mode]</button>
                     </nav>
                 </div>
@@ -177,9 +179,30 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                                 <span>
                                     <a href={work.link} target="_blank" rel="noopener noreferrer" className="minimal-project-title">{work.title}</a>
                                     {work.detail && <span className="minimal-role"> {work.detail}</span>}
+                                    {work.post && <> <a href={work.post} className="minimal-role" style={{ color: '#c678dd' }}>[devlog]</a></>}
                                 </span>
                             </div>
                         ))}
+                    </TerminalPanel>
+                </section>
+
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '1rem 0' }}>
+                    <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
+                </div>
+
+                <section className="minimal-section">
+                    <h2 style={{ marginTop: '2rem' }}>writing</h2>
+                    <TerminalPanel cmd="ls -t ~/blog">
+                        {posts.map(post => (
+                            <div key={post.slug} className="term-ls-row">
+                                <span style={{ color: '#e5c07b' }}>{post.date.slice(0, 4)}</span>
+                                <span>
+                                    <a href={`/blog/${post.slug}/`} className="minimal-project-title">{post.title}</a>
+                                    {post.subtitle && <span className="minimal-role"> {post.subtitle}</span>}
+                                </span>
+                            </div>
+                        ))}
+                        <a href="/blog/" style={{ color: '#61afef' }}>cd ~/blog →</a>
                     </TerminalPanel>
                 </section>
 
