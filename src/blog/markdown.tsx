@@ -79,7 +79,7 @@ export function renderMarkdown(
     const headings: Heading[] = [];
     let i = 0, key = 0;
     const isBlockStart = (l: string) =>
-        /^(#{1,4} |```|> |[-*] |\d+\. |---$|::|!\[)/.test(l) || l.trim() === '';
+        /^(#{1,4} |```|> |[-*] |\d+\. |---$|::|!\[|\|)/.test(l) || l.trim() === '';
 
     while (i < lines.length) {
         const line = lines[i];
@@ -108,6 +108,23 @@ export function renderMarkdown(
             continue;
         }
         if (line.trim() === '---') { nodes.push(<hr key={key++} />); i++; continue; }
+        // GitHub-style table: header row, |---| separator, body rows
+        if (line.startsWith('|') && /^\|[\s:|-]+\|$/.test(lines[i + 1]?.trim() ?? '')) {
+            const cells = (l: string) => l.trim().replace(/^\||\|$/g, '').split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, '|'));
+            const head = cells(line);
+            const rows: string[][] = [];
+            i += 2;
+            while (i < lines.length && lines[i].startsWith('|')) rows.push(cells(lines[i++]));
+            nodes.push(
+                <div key={key++} className="post-table">
+                    <table>
+                        <thead><tr>{head.map((c, j) => <th key={j}>{inline(c)}</th>)}</tr></thead>
+                        <tbody>{rows.map((r, j) => <tr key={j}>{r.map((c, k) => <td key={k}>{inline(c)}</td>)}</tr>)}</tbody>
+                    </table>
+                </div>,
+            );
+            continue;
+        }
         if (line.startsWith('::')) {
             const render = components[line.slice(2).trim()];
             if (render) nodes.push(<React.Fragment key={key++}>{render()}</React.Fragment>);
