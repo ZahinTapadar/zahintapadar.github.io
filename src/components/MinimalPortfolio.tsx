@@ -6,6 +6,7 @@ import lastImg from '../assets/last.jpg';
 import iconComputer from '../assets/exp.jpg';
 import iconFolder from '../assets/project.jpg';
 import iconStar from '../assets/icon_star.jpg';
+import iconblog from '../assets/blog.png';
 import mikuImg from '../assets/b&wmiku.jpeg';
 import projectsImg from '../assets/projects.jpeg';
 import endlineImg from '../assets/endline.png';
@@ -191,7 +192,10 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                 </div>
 
                 <section className="minimal-section">
-                    <h2 style={{ marginTop: '2rem' }}>writing</h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
+                        <img src={iconblog} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                        <h2 style={{ margin: 0 }}>writing</h2>
+                    </div>
                     <TerminalPanel cmd="ls -t ~/blog">
                         {posts.map(post => (
                             <div key={post.slug} className="term-ls-row">
