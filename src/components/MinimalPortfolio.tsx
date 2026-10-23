@@ -29,7 +29,7 @@ interface MinimalPortfolioProps {
 
 const works: { id: number; title: string; year: string; roles: string; detail?: string; link: string; post?: string }[] = [
     { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: 'Built', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
-    { id: 9, title: 'Lua Wordle Solver', year: '2026', roles: 'Built', detail: 'lua + c minimax core', link: 'https://zahintapadar.github.io/Wordle-Algorithm/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
+    { id: 9, title: 'wortraum', year: '2026', roles: 'Built', detail: 'wordle solver, lua + c + wasm', link: 'https://zahintapadar.github.io/wortraum/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: 'Developed', link: 'https://github.com/ZahinTapadar/adb-app-manager' },
     { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: 'Built', link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: 'Developed', link: 'https://beautifyollama.vercel.app/' },

@@ -10,11 +10,11 @@ import webGenyImg from '../assets/webgenymac.webp';
 import adbAppManagerImg from '../assets/adbappmanager.webp';
 import razerManagerImg from '../assets/razermanager.webp';
 import schwarzschildImg from '../assets/schwarzschildlab.webp';
-import luaWordleImg from '../assets/luawordle.webp';
+import wortraumImg from '../assets/wortraum.webp';
 
 const works: { id: number; title: string; year: string; roles: { name: string; value: string }[]; image: string; link: string; post?: string }[] = [
     { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
-    { id: 9, title: 'Lua Wordle Solver', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: luaWordleImg, link: 'https://zahintapadar.github.io/Wordle-Algorithm/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
+    { id: 9, title: 'wortraum', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: wortraumImg, link: 'https://zahintapadar.github.io/wortraum/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: 'https://github.com/ZahinTapadar/adb-app-manager' },
     { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', roles: [{ name: 'Experience', value: 'Built' }], image: razerManagerImg, link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' },
     { id: 1, title: 'BeautifyOllama', year: '2025', roles: [{ name: 'Role', value: 'Developed' }], image: ollamaImg, link: 'https://beautifyollama.vercel.app/' },

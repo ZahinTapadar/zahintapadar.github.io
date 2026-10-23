@@ -3,11 +3,11 @@ title: Making a Wordle Solver That Actually Thinks
 subtitle: not a tutorial, just a devlog
 date: 2026-10-23
 tags: algorithms, c, lua, webassembly
-project: https://zahintapadar.github.io/Wordle-Algorithm/
-repo: https://github.com/ZahinTapadar/Wordle-Algorithm/tree/lua-implementation
-description: A devlog on Lua Wordle Solver: an information-theoretic Wordle solver with a C core, driven from Lua through LuaJIT FFI and compiled to a 3 KB WebAssembly module for the browser.
-cover: /blog/wordle-solver/opening.webp
-demo_cmd: ./wordle-solver
+project: https://zahintapadar.github.io/wortraum/
+repo: https://github.com/ZahinTapadar/wortraum/tree/lua-implementation
+description: A devlog on wortraum, an information-theoretic Wordle solver with a C core, driven from Lua through LuaJIT FFI and compiled to a 3 KB WebAssembly module for the browser.
+cover: /blog/wortraum/opening.webp
+demo_cmd: ./wortraum
 demo_note: loads the C core as WebAssembly · tap tiles or type 0 / 1 / 2, then enter
 ---
 
@@ -19,7 +19,7 @@ Not one that just checks which letters have appeared, but one that looks at ever
 
 That question turned out to be much more interesting than I expected.
 
-This project is called [Lua Wordle Solver](https://zahintapadar.github.io/Wordle-Algorithm/). It began as a desktop app made with Lua and LÖVE, but the actual solving logic lives in C. Lua talks to it through LuaJIT FFI, and the same C core can also be compiled to WebAssembly and run directly in the browser.
+This project is called [wortraum](https://zahintapadar.github.io/wortraum/), German for "word space": the space of possible answers that every guess collapses a little further. It began as a desktop app made with Lua and LÖVE, but the actual solving logic lives in C. Lua talks to it through LuaJIT FFI, and the same C core can also be compiled to WebAssembly and run directly in the browser.
 
 ::demo
 
@@ -174,7 +174,7 @@ If one guess creates a lot of small, balanced buckets, it is good. If another cr
 
 # Scoring a guess: I called it minimax
 
-My first description of this was "minimax": pick the guess whose worst outcome is smallest. That is what the project and the UI still say.
+My first description of this was "minimax": pick the guess whose worst outcome is smallest. That is what the project called itself, right up until I wrote this post.
 
 But when I went back to the scoring code for this post, it turned out to be doing something slightly different, and more interesting.
 
@@ -217,7 +217,7 @@ I still like the name. But the honest description is: it is an information-theor
 
 With every answer still possible, the best guess is `RAISE`.
 
-![The browser version on its first move: RAISE, scored against all 2,309 answers](/blog/wordle-solver/opening.webp)
+![The browser version on its first move: RAISE, scored against all 2,309 answers](/blog/wortraum/opening.webp)
 
 `RAISE` splits the 2,309 answers into 132 different feedback buckets, and its largest bucket holds 167 words. Out of all 12,953 guesses, no word has a smaller worst case (`ARISE` ties it), so a true minimax solver would open with the same letters.
 
@@ -377,17 +377,17 @@ After playing the suggested guess in Wordle, you click or type the five feedback
 2 = green
 ```
 
-![Typing the feedback for RAISE when the answer is PLANT: only the A is yellow](/blog/wordle-solver/feedback.webp)
+![Typing the feedback for RAISE when the answer is PLANT: only the A is yellow](/blog/wortraum/feedback.webp)
 
 Then the solver removes every word that could not have produced that exact feedback.
 
 Here is a real game. The hidden word is `PLANT`. After `RAISE` comes back as `0 1 0 0 0`, only 91 answers are left, and the solver picks `FLOAT`: a word that tests `L`, `O`, `A` and `T` at once.
 
-![After one guess, 91 answers remain and FLOAT is the next best question](/blog/wordle-solver/second-guess.webp)
+![After one guess, 91 answers remain and FLOAT is the next best question](/blog/wortraum/second-guess.webp)
 
 `FLOAT` comes back as `0 2 0 1 2`. Exactly one word in the whole list fits both answers.
 
-![Solved in three: PLANT](/blog/wordle-solver/solved.webp)
+![Solved in three: PLANT](/blog/wortraum/solved.webp)
 
 Eventually, only one answer remains.
 
