@@ -7,6 +7,8 @@ import iconComputer from '../assets/exp.jpg';
 import iconFolder from '../assets/project.jpg';
 import iconStar from '../assets/icon_star.jpg';
 import iconblog from '../assets/blog.png';
+import fadeImg from '../assets/fade.jpg';
+import wallImg from '../assets/wall.png';
 import mikuImg from '../assets/b&wmiku.jpeg';
 import projectsImg from '../assets/projects.jpeg';
 import endlineImg from '../assets/endline.png';
@@ -104,7 +106,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <h1 style={{ fontSize: '2em', marginBottom: '0.2rem', marginTop: 0 }}>Zahin</h1>
-                                <img src={iconStar} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                                <img src={iconStar} alt="" className="minimal-heading-icon" />
                             </div>
                             <div style={{ color: '#5c6370', fontSize: '1.2em' }}>PenguinKat</div>
                         </div>
@@ -162,7 +164,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconFolder} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                        <img src={iconFolder} alt="" className="minimal-heading-icon" />
                         <h2 style={{ margin: 0 }}>projects</h2>
                     </div>
                     <div style={{ margin: '2rem 0', display: 'flex', justifyContent: 'center' }}>
@@ -191,9 +193,18 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
                 </div>
 
+                <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
+                    <img
+                        src={fadeImg}
+                        alt="Writing Graphic"
+                        className="minimal-aesthetic-img"
+                        style={{ maxWidth: '400px' }}
+                    />
+                </div>
+
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconblog} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                        <img src={iconblog} alt="" className="minimal-heading-icon" />
                         <h2 style={{ margin: 0 }}>writing</h2>
                     </div>
                     <TerminalPanel cmd="ls -t ~/blog">
@@ -214,9 +225,18 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                     <img src={endlineImg} alt="Divider" style={{ width: '100%', maxWidth: '400px', objectFit: 'contain', mixBlendMode: 'screen' }} />
                 </div>
 
+                <div style={{ margin: '3rem 0', display: 'flex', justifyContent: 'center' }}>
+                    <img
+                        src={wallImg}
+                        alt="Experience Graphic"
+                        className="minimal-aesthetic-img"
+                        style={{ maxWidth: '400px' }}
+                    />
+                </div>
+
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={iconComputer} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                        <img src={iconComputer} alt="" className="minimal-heading-icon" />
                         <h2 style={{ margin: 0 }}>experience</h2>
                     </div>
                     <TerminalPanel cmd="git log career">
@@ -248,7 +268,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
                 <section className="minimal-section">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', marginTop: '2rem' }}>
-                        <img src={techstackImg} alt="" style={{ width: '40px', height: '40px', objectFit: 'contain' }} />
+                        <img src={techstackImg} alt="" className="minimal-heading-icon" />
                         <h2 style={{ margin: 0 }}>tech stack</h2>
                     </div>
                     <TechTree groups={techGroups} />
