@@ -103,10 +103,10 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
                         />
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <h1 style={{ fontSize: '2em', marginBottom: '0.2rem', marginTop: 0 }}>zahin</h1>
+                                <h1 style={{ fontSize: '2em', marginBottom: '0.2rem', marginTop: 0 }}>Zahin</h1>
                                 <img src={iconStar} alt="" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                             </div>
-                            <div style={{ color: '#5c6370', fontSize: '1.2em' }}>engineer</div>
+                            <div style={{ color: '#5c6370', fontSize: '1.2em' }}>PenguinKat</div>
                         </div>
                     </div>
                     <nav className="minimal-nav">
