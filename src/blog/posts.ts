@@ -7,6 +7,6 @@ const files = import.meta.glob('./posts/*.md', { query: '?raw', import: 'default
 
 export const posts: Post[] = Object.entries(files)
     .map(([path, raw]) => parsePost(path.replace(/^.*\/(.*)\.md$/, '$1'), raw))
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));   // stable order for same-day posts
 
 export const findPost = (slug: string) => posts.find((p) => p.slug === slug);
