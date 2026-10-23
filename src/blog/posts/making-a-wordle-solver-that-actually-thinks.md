@@ -37,9 +37,7 @@ In Wordle, every guess produces one of three states for each letter:
 
 Since there are five positions, a guess can produce:
 
-```
-3^5 = 243
-```
+$$3^5 = 243$$
 
 possible feedback patterns.
 
@@ -114,15 +112,13 @@ This is a small thing, but without it the solver can confidently eliminate the c
 
 Instead of storing feedback as five separate values, I encode the pattern as a base-3 number.
 
-```
-pattern = a₀ × 3⁰ + a₁ × 3¹ + a₂ × 3² + a₃ × 3³ + a₄ × 3⁴
-```
+$$\text{pattern} = a_0 \cdot 3^0 + a_1 \cdot 3^1 + a_2 \cdot 3^2 + a_3 \cdot 3^3 + a_4 \cdot 3^4$$
+
+where $a_i$ is the colour of letter $i$: 0, 1 or 2.
 
 For example:
 
-```
-0 1 2 0 2   →   0 + 3 + 18 + 0 + 162 = 183
-```
+$$(0,1,2,0,2) \;\to\; 0 \cdot 1 + 1 \cdot 3 + 2 \cdot 9 + 0 \cdot 27 + 2 \cdot 81 = 183$$
 
 This is useful because every feedback result becomes an array index from `0` to `242`. "All gray" is `0`, "all green" is `242`, and grouping answers by feedback becomes a single array lookup.
 
@@ -218,9 +214,11 @@ B is obviously the best and C is obviously bad. But is D better than A? D usuall
 
 Play twenty questions with 8 cards. If every yes/no question cuts the pile exactly in half, you go 8 → 4 → 2 → 1. Three questions.
 
-With 16 cards it takes four questions. With 1,024 cards, ten. Every time the pile doubles, you need one more question. The number of halvings from N cards down to 1 is called **log₂ N**, "log base 2 of N", and each halving is one **bit**.
+With 16 cards it takes four questions. With 1,024 cards, ten. Every time the pile doubles, you need one more question. The number of halvings from $N$ cards down to 1 is called $\log_2 N$, "log base 2 of $N$", and each halving is one **bit**. Put another way, $\log_2 N$ is the power you have to raise 2 to in order to get $N$:
 
-| Cards | Halvings needed (log₂) |
+$$2^{\log_2 N} = N \qquad \text{e.g. } 2^3 = 8, \text{ so } \log_2 8 = 3$$
+
+| Cards | Halvings needed ($\log_2 N$) |
 | --- | --- |
 | 2 | 1 |
 | 8 | 3 |
@@ -231,11 +229,9 @@ With 16 cards it takes four questions. With 1,024 cards, ten. Every time the pil
 
 ## How much did one result tell me?
 
-If a guess takes you from N cards down to a pile of n, the number of halvings left went from log₂ N to log₂ n. The difference is what you learned:
+If a guess takes you from $N$ cards down to a pile of $n$, the number of halvings left went from $\log_2 N$ to $\log_2 n$. The difference is what you learned:
 
-```
-bits learned = log₂ N − log₂ n = log₂(N / n)
-```
+$$\text{bits learned} = \log_2 N - \log_2 n = \log_2 \frac{N}{n}$$
 
 With `RAISE`:
 
@@ -243,19 +239,17 @@ With `RAISE`:
 - Only the A is yellow (2,309 → 91): 4.67 bits
 - Any pile of 1 (2,309 → 1): 11.17 bits, the whole puzzle in one go
 
-Rare results teach you more. That is the key idea of information theory: **information is surprise**. Since every answer is equally likely, the chance of landing in a pile of n is p = n / N, so the same formula can be written as log₂(1 / p). Something with a 1-in-2 chance is worth 1 bit, 1-in-4 is 2 bits, 1-in-2,309 is 11.17 bits.
+Rare results teach you more. That is the key idea of information theory: **information is surprise**. Since every answer is equally likely, the chance of landing in a pile of $n$ is $p = n/N$, so the same formula can be written as $\log_2(1/p)$. Something with a 1-in-2 chance is worth 1 bit, 1-in-4 is 2 bits, 1-in-2,309 is 11.17 bits.
 
 ## Expected information: entropy
 
 Before guessing, you do not know which pile you will land in. But you know the chance of each one, so you can work out the *average* number of bits the guess will give you: each pile's bits, weighted by how likely you are to land there.
 
-```
-H = Σ (nₖ / N) · log₂(N / nₖ)
-```
+$$H = \sum_k \frac{n_k}{N} \log_2 \frac{N}{n_k}$$
 
-The Σ just means "add this up over every pile k". This average is called **entropy**, written H. Here are the toy guesses again:
+Here $n_k$ is the size of pile $k$, and $\sum_k$ just means "add this up over every pile". This average is called **entropy**, written $H$. Here are the toy guesses again:
 
-| Guess | Piles | Expected bits (H) |
+| Guess | Piles | Expected bits ($H$) |
 | --- | --- | --- |
 | B | 2, 2, 2, 2 | 2.00 |
 | D | 5, 1, 1, 1 | 1.55 |
@@ -275,29 +269,29 @@ For the real game:
 
 `FUZZY` is a bad first guess because 58% of the time (1,349 answers) it comes back all gray, which tells you very little.
 
-There is also a ceiling. A guess can only produce 243 different colour patterns, so even a perfect split could give at most log₂ 243 = **7.92 bits**. Since the puzzle holds 11.17, no guess can always pin the answer down on its own. You need at least two rounds of colours before you can be sure, which is why good solvers average around three to four guesses, not two.
+There is also a ceiling. A guess can only produce 243 different colour patterns, so even a perfect split could give at most $\log_2 243 \approx$ **7.92 bits**. Since the puzzle holds 11.17, no guess can always pin the answer down on its own. You need at least two rounds of colours before you can be sure, which is why good solvers average around three to four guesses, not two.
 
 ## From entropy to one line of C
 
-Here is the part that surprised me. The solver never computes a probability or divides anything. It just adds up `n · log₂ n`. That turns out to be the same thing.
+Here is the part that surprised me. The solver never computes a probability or divides anything. It just adds up $n \log_2 n$. That turns out to be the same thing.
 
 Split the log in the entropy formula into two pieces:
 
-```
-H = Σ (n/N) · log₂(N/n)
-  = Σ (n/N) · (log₂ N − log₂ n)
-  = log₂ N · Σ (n/N)  −  (1/N) · Σ n · log₂ n
-```
+$$
+\begin{aligned}
+H &= \sum_k \frac{n_k}{N} \log_2 \frac{N}{n_k} \\
+  &= \sum_k \frac{n_k}{N} \left( \log_2 N - \log_2 n_k \right) \\
+  &= \log_2 N \cdot \sum_k \frac{n_k}{N} \;-\; \frac{1}{N} \sum_k n_k \log_2 n_k
+\end{aligned}
+$$
 
-The piles always add back up to all N cards, so Σ (n/N) = 1:
+The piles always add back up to all $N$ cards, so $\sum_k n_k / N = 1$:
 
-```
-H = log₂ N − (1/N) · Σ n · log₂ n
-```
+$$H = \log_2 N - \frac{1}{N} \sum_k n_k \log_2 n_k$$
 
-On a given turn, N is the same for every guess the solver is comparing. So the only part that differs between guesses is Σ n · log₂ n, and it is *subtracted*. The smaller it is, the more information the guess gives:
+On a given turn, $N$ is the same for every guess the solver is comparing. So the only part that differs between guesses is $\sum_k n_k \log_2 n_k$, and it is *subtracted*. The smaller it is, the more information the guess gives:
 
-> maximise H  ⇔  minimise Σ n · log₂ n
+$$\text{maximise } H \iff \text{minimise } \sum_k n_k \log_2 n_k$$
 
 In the toy game, B scores 8, A scores 16, C scores 19.65, and a guess that tells you nothing (one pile of 8) scores 24. Big piles are expensive, and they get more expensive faster than they grow: a pile twice as big costs more than twice as much.
 
@@ -313,7 +307,7 @@ for (int k = 0; k < 243; k++) {
 
 ## Logarithms without floating point
 
-`lookup[n]` has to be n · log₂ n, but computing logs with decimals in the innermost loop is slow. So the table is built once, using integers only:
+`lookup[n]` has to be $n \log_2 n$, but computing logs with decimals in the innermost loop is slow. So the table is built once, using integers only:
 
 ```c
 for (int i = 1; i < 13000; i++) {
@@ -324,14 +318,16 @@ for (int i = 1; i < 13000; i++) {
 
 It works in two steps. Take n = 167.
 
-1. **The whole part.** In binary, 167 is `10100111`: eight digits, so it sits between 2⁷ = 128 and 2⁸ = 256, and log₂ 167 is 7-point-something. `__builtin_clz` counts the leading zeros of a 32-bit number, so `31 − clz` is the position of the highest 1 bit: 7.
-2. **The fraction.** Between 128 and 256 the code draws a straight line: 167 is (167 − 128) / 128 = 0.305 of the way along. So log₂ 167 ≈ 7.305. The real value is 7.384.
+1. **The whole part.** In binary, 167 is `10100111`: eight digits, so it sits between $2^7 = 128$ and $2^8 = 256$, and $\log_2 167$ is 7-point-something. `__builtin_clz` counts the leading zeros of a 32-bit number, so `31 − clz` is the position of the highest 1 bit: 7.
+2. **The fraction.** Between 128 and 256 the code draws a straight line: 167 is $(167 - 128)/128 \approx 0.305$ of the way along. So $\log_2 167 \approx 7.305$. The real value is 7.384.
 
 Both parts are multiplied by 256 so the fraction survives as a whole number. That is *fixed point*: storing 7.305 as 1,870 and remembering the scale. Then:
 
-```
-L[167] = 167 × (7 × 256 + 78) = 312,290   ≈ 256 · 167 · log₂ 167
-```
+$$L[167] = 167 \times (7 \times 256 + 78) = 312{,}290 \;\approx\; 256 \cdot 167 \cdot \log_2 167$$
+
+In general the table holds
+
+$$L[n] = n \left( 256 \lfloor \log_2 n \rfloor + \left\lfloor \frac{256\,(n - 2^{\lfloor \log_2 n \rfloor})}{2^{\lfloor \log_2 n \rfloor}} \right\rfloor \right) \approx 256\, n \log_2 n$$
 
 The straight line always sits slightly under the real curve, so the estimate is never too high, is exact at powers of two, and is off by at most 0.09 bits. Every guess gets the same kind of error, so the ranking almost never changes. Almost: by true entropy `CRATE` (5.835 bits) edges out `IRATE` (5.833), but the integer version ranks `IRATE` first. That is the price of never touching a float.
 
@@ -382,7 +378,7 @@ The next best openers are close behind:
 | 5 | TRACE | 150 | 246 | 5.830 |
 | 6 | ARISE | 123 | 167 | 5.821 |
 
-`SLATE` makes more buckets than `RAISE`, but less evenly. That is exactly the kind of difference the `n · log₂ n` score is sensitive to.
+`SLATE` makes more buckets than `RAISE`, but less evenly. That is exactly the kind of difference the $n \log_2 n$ score is sensitive to.
 
 # A small bias toward actual answers
 
@@ -422,11 +418,13 @@ Without the bonus, it never needs more than five guesses. That is a real trade-o
 
 ## What the bonus is worth, in bits
 
-The entropy formula explains *why* the bonus turns greedy. The score is about 256 × Σ n · log₂ n, and H = log₂ N − (Σ n · log₂ n) / N. So a bonus of B points is worth B / (256 × N) bits.
+The entropy formula explains *why* the bonus turns greedy. The score is about $256 \sum_k n_k \log_2 n_k$, and $H = \log_2 N - \frac{1}{N} \sum_k n_k \log_2 n_k$. So a bonus of $B$ points is worth
+
+$$\Delta H = \frac{B}{256\,N} \text{ bits}$$
 
 Every word that could still be the answer is also on the official list, so it collects both bonuses: 250,000 points.
 
-| Answers left | What 250,000 points is worth | Most a guess could ever give (log₂ N) |
+| Answers left ($N$) | What 250,000 points is worth | Most a guess could ever give ($\log_2 N$) |
 | --- | --- | --- |
 | 2,309 | 0.42 bits | 11.17 bits |
 | 137 | 7.13 bits | 7.10 bits |
@@ -435,7 +433,7 @@ Every word that could still be the answer is also on the official list, so it co
 
 On the first move the bonus is a gentle nudge. But the same fixed number of points is worth more and more as N shrinks. Once 137 or fewer answers are left, it is worth more than any guess could possibly tell you, so a word that cannot be the answer will never be chosen again, however cleverly it splits the piles. That is exactly what happens on `GONER`.
 
-A fairer bonus would scale with N. Guessing a candidate gives you a 1-in-N chance of winning right now, and that chance is what should be weighed against the bits you give up.
+A fairer bonus would scale with N. Guessing a candidate gives you a $1/N$ chance of winning right now, and that chance is what should be weighed against the bits you give up.
 
 # Why Lua and C?
 
@@ -556,7 +554,10 @@ Here is a real game. The hidden word is `PLANT`. After `RAISE` comes back as `0 
 
 ![Solved in three: PLANT](/blog/wortraum/solved.webp)
 
-In bits: `RAISE` took 2,309 answers down to 91, which is log₂(2,309 / 91) = 4.67 bits. `FLOAT` took 91 down to 1, which is log₂ 91 = 6.51 bits. Together that is 11.17 bits, exactly the uncertainty the game started with. The bits really do add up.
+In bits: `RAISE` took 2,309 answers down to 91, which is $\log_2(2309/91) \approx 4.67$ bits. `FLOAT` took 91 down to 1, which is $\log_2 91 \approx 6.51$ bits. Together that is exactly the uncertainty the game started with:
+
+$$\log_2 \frac{2309}{91} + \log_2 91 = \log_2 2309 \approx 11.17 \text{ bits}$$
+ The bits really do add up.
 
 Eventually, only one answer remains.
 

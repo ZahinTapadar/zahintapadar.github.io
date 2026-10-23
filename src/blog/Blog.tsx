@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import '../components/MinimalPortfolio.css';
 import './Blog.css';
 import TerminalPanel, { TermPrompt } from '../components/TerminalPanel';
@@ -32,6 +32,47 @@ const DemoEmbed: React.FC<{ post: Post }> = ({ post }) => {
         </figure>
     );
 };
+
+// MathJax 3 (TeX in, SVG out), fetched only for posts that contain math.
+// It typesets just the post body, so code blocks and the rest of the page are
+// never scanned; until it finishes the TeX stays hidden (see Blog.css).
+declare global {
+    interface Window { MathJax?: { typesetPromise?: (els: Element[]) => Promise<void> } & Record<string, unknown> }
+}
+const MATHJAX_SRC = 'https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js';
+let mathJaxLoading: Promise<void> | null = null;
+
+function loadMathJax(): Promise<void> {
+    if (!mathJaxLoading) {
+        window.MathJax = {
+            tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+            svg: { fontCache: 'global' },
+            startup: { typeset: false },
+        };
+        mathJaxLoading = new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = MATHJAX_SRC;
+            script.async = true;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error('MathJax failed to load'));
+            document.head.appendChild(script);
+        });
+    }
+    return mathJaxLoading;
+}
+
+function useMath(ref: React.RefObject<HTMLElement | null>, enabled: boolean) {
+    const [ready, setReady] = useState(!enabled);
+    useEffect(() => {
+        if (!enabled || !ref.current) return;
+        const el = ref.current;
+        loadMathJax()
+            .then(() => window.MathJax?.typesetPromise?.([el]))
+            .catch(() => { /* leave the TeX source visible */ })
+            .finally(() => setReady(true));
+    }, [ref, enabled]);
+    return ready;
+}
 
 const Header: React.FC<{ path: string }> = ({ path }) => (
     <header className="minimal-header">
@@ -67,6 +108,8 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
     );
     const i = posts.indexOf(post);
     const newer = posts[i - 1], older = posts[i + 1];
+    const bodyRef = useRef<HTMLDivElement>(null);
+    const mathReady = useMath(bodyRef, post.body.includes('$'));
 
     return (
         <>
@@ -92,7 +135,7 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
                         <ol>{headings.map((h) => <li key={h.id}><a href={`#${h.id}`}>{h.text}</a></li>)}</ol>
                     </nav>
                 )}
-                <div className="post-body">{nodes}</div>
+                <div ref={bodyRef} className={`post-body${mathReady ? ' math-ready' : ''}`}>{nodes}</div>
             </article>
             <footer className="post-footer">
                 <div>{newer && <a href={`/blog/${newer.slug}/`}>← {newer.title}</a>}</div>
