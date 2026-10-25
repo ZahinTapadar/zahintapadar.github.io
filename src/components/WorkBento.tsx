@@ -11,8 +11,10 @@ import adbAppManagerImg from '../assets/adbappmanager.webp';
 import razerManagerImg from '../assets/razermanager.webp';
 import schwarzschildImg from '../assets/schwarzschildlab.webp';
 import wortraumImg from '../assets/wortraum.webp';
+import atlasImg from '../assets/atlas.webp';
 
 const works: { id: number; title: string; year: string; roles: { name: string; value: string }[]; image: string; link: string; post?: string }[] = [
+    { id: 11, title: 'ATLAS', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: atlasImg, link: 'https://zahintapadar.github.io/atlas/' },
     { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: schwarzschildImg, link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
     { id: 9, title: 'wortraum', year: '2026', roles: [{ name: 'Role', value: 'Built' }], image: wortraumImg, link: 'https://zahintapadar.github.io/wortraum/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: [{ name: 'Role', value: 'Developed' }], image: adbAppManagerImg, link: 'https://github.com/ZahinTapadar/adb-app-manager' },
