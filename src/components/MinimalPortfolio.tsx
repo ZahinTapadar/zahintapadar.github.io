@@ -28,7 +28,7 @@ interface MinimalPortfolioProps {
 }
 
 const works: { id: number; title: string; year: string; roles: string; detail?: string; link: string; post?: string }[] = [
-    { id: 11, title: 'ATLAS', year: '2026', roles: 'Built', detail: 'macos time tracker, swift + claude', link: 'https://zahintapadar.github.io/atlas/' },
+    { id: 11, title: 'ATLAS', year: '2026', roles: 'Built', detail: 'macos time tracker, swift + claude', link: 'https://atlasmac.web.app/' },
     { id: 10, title: 'Schwarzschild Lab', year: '2026', roles: 'Built', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
     { id: 9, title: 'wortraum', year: '2026', roles: 'Built', detail: 'wordle solver, lua + c + wasm', link: 'https://zahintapadar.github.io/wortraum/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
     { id: 7, title: 'ADB App Manager', year: '2026', roles: 'Developed', link: 'https://github.com/ZahinTapadar/adb-app-manager' },
