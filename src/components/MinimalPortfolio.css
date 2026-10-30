@@ -528,7 +528,8 @@
   color: var(--fg-2);
 }
 
-.term-row > .term-prompt {
+.term-row > .term-prompt,
+.term-row > div > .term-prompt {
   margin: 0.75rem 0 0 0;
 }
 
@@ -711,4 +712,98 @@
   .term-feature {
     padding-block: 0.45rem;
   }
+}
+
+/* Section anchors land a little below the top edge */
+.minimal-portfolio [id] {
+  scroll-margin-top: 2rem;
+}
+
+html:has(.minimal-portfolio) {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.minimal-portfolio) {
+    scroll-behavior: auto;
+  }
+}
+
+/* Left gutter navigation: the page as a `tree`, only where the gutter is
+   wide enough to hold it without crowding the 800px column */
+.side-nav {
+  display: none;
+}
+
+/* 1260px leaves room for a 12rem tree plus a gap beside the 800px column */
+@media (min-width: 1260px) {
+  .side-nav {
+    display: block;
+    position: fixed;
+    top: 7.5rem;
+    left: max(1.25rem, calc(50% - 400px - 14.5rem));
+    width: 12rem;
+    padding-right: 1rem;
+    font-size: 13px;
+    line-height: 1.75;
+    z-index: 10;
+  }
+}
+
+.side-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.side-nav-root {
+  color: var(--fg);
+  margin-bottom: 0.25rem;
+}
+
+.minimal-portfolio .side-nav a {
+  display: block;
+  color: var(--fg-2);
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s;
+}
+
+.minimal-portfolio .side-nav a.side-nav-child {
+  color: var(--dim);
+}
+
+.minimal-portfolio .side-nav a:hover {
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.minimal-portfolio .side-nav a.is-active {
+  color: var(--accent);
+}
+
+.side-nav-branch {
+  color: #4b5059;
+}
+
+/* Reading-progress rail along the nav's right edge */
+.side-nav-rail {
+  position: absolute;
+  top: 0.3rem;
+  right: 0;
+  bottom: 0.3rem;
+  width: 2px;
+  border-radius: 1px;
+  background: #1c1f24;
+  overflow: hidden;
+}
+
+.side-nav-rail span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  opacity: 0.7;
+  transform-origin: top;
+  transition: transform 0.1s linear;
 }

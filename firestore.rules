@@ -1,0 +1,27 @@
+rules_version = '2';
+
+// Blog counters: one document per post at posts/{slug} with `views` and `likes`.
+// Anyone can read them. A write may only add one view, or add/remove one like,
+// and may not touch anything else.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /posts/{slug} {
+      allow read: if true;
+
+      allow create: if slug.matches('^[a-z0-9-]{1,100}$')
+        && request.resource.data.keys().hasOnly(['views', 'likes'])
+        && request.resource.data.get('views', 0) in [0, 1]
+        && request.resource.data.get('likes', 0) in [0, 1];
+
+      allow update: if request.resource.data.keys().hasOnly(['views', 'likes'])
+        && (
+          (request.resource.data.get('views', 0) == resource.data.get('views', 0) + 1
+            && request.resource.data.get('likes', 0) == resource.data.get('likes', 0))
+          ||
+          (request.resource.data.get('views', 0) == resource.data.get('views', 0)
+            && (request.resource.data.get('likes', 0) - resource.data.get('likes', 0)) in [1, -1]
+            && request.resource.data.get('likes', 0) >= 0)
+        );
+    }
+  }
+}

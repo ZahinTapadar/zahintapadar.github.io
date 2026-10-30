@@ -393,3 +393,63 @@
 .post-body:not(.math-ready) .post-math-inline {
   visibility: hidden;
 }
+
+/* Views and thumbs-ups (Firestore) */
+.post-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.post-responses {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--line);
+}
+
+.post-like {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  font: inherit;
+  color: var(--fg-2);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.post-like:hover {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.5);
+}
+
+.post-like.is-liked {
+  color: var(--accent);
+  border-color: rgba(var(--accent-rgb), 0.6);
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.16), rgba(var(--accent-rgb), 0.04));
+}
+
+.post-like-count {
+  font-variant-numeric: tabular-nums;
+  padding-left: 0.5rem;
+  border-left: 1px solid currentColor;
+  opacity: 0.8;
+}
+
+/* Comments (giscus) */
+.minimal-portfolio .post-comments-title {
+  margin: 2.5rem 0 0.25rem;
+}
+
+.post-comments-note {
+  color: var(--dim);
+  margin: 0 0 1.25rem !important;
+}
+
+.post-comments-thread {
+  min-height: 120px;
+}
