@@ -440,7 +440,7 @@
   opacity: 0.8;
 }
 
-/* Comments (giscus) */
+/* Comments (anonymous, Firestore) */
 .minimal-portfolio .post-comments-title {
   margin: 2.5rem 0 0.25rem;
 }
@@ -450,6 +450,120 @@
   margin: 0 0 1.25rem !important;
 }
 
-.post-comments-thread {
-  min-height: 120px;
+.post-comment-list {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+}
+
+.post-comment {
+  padding: 1rem 0;
+  border-bottom: 1px dashed var(--line);
+}
+
+.post-comment:first-child {
+  padding-top: 0;
+}
+
+.post-comment-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.post-comment-name {
+  color: var(--fg);
+}
+
+.post-comment-name.is-anon {
+  color: var(--dim);
+  font-style: italic;
+}
+
+.post-comment-body {
+  margin: 0 !important;
+  color: var(--fg-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.post-comment-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.post-comment-field {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--fg-2);
+}
+
+.post-comment-field input,
+.post-comment-field textarea {
+  font: inherit;
+  color: var(--fg);
+  background: #0b0d10;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.6rem 0.75rem;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.post-comment-field input::placeholder,
+.post-comment-field textarea::placeholder {
+  color: var(--dim);
+}
+
+.post-comment-field input:focus,
+.post-comment-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.post-comment-field input {
+  max-width: 22rem;
+}
+
+/* Spam trap: off-screen for people, still filled in by naive bots */
+.post-comment-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.post-comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.post-like:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.post-like:disabled:hover {
+  color: var(--fg-2);
+  border-color: var(--line);
+}
+
+.post-comment-status {
+  margin: 0 !important;
+  min-height: 1.6em;
+  color: var(--accent);
+}
+
+.post-comment-status.is-error {
+  color: #e8a87c;
+}
+
+/* With the outline in the right gutter, the inline contents list is redundant */
+@media (min-width: 1260px) {
+  .post-toc {
+    display: none;
+  }
 }

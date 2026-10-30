@@ -6,7 +6,7 @@ import { firebaseConfig } from './firebase-config';
 type Firestore = typeof import('firebase/firestore/lite');
 let firestore: Promise<{ fs: Firestore; db: ReturnType<Firestore['getFirestore']> }> | null = null;
 
-function connect() {
+export function connect() {
     if (!firestore && firebaseConfig) {
         const config = firebaseConfig;
         firestore = Promise.all([import('firebase/app'), import('firebase/firestore/lite')]).then(([app, fs]) => ({
