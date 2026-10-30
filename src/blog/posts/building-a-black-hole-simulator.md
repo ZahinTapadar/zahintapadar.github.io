@@ -5,7 +5,7 @@ date: 2026-10-23
 tags: graphics, physics, rust, webassembly, webgl
 project: https://zahintapadar.github.io/schwarzschild-lab/
 repo: https://github.com/ZahinTapadar/schwarzschild-lab
-description: A devlog on Schwarzschild Lab, a real-time black hole simulator in the browser: per-pixel light-ray tracing in WebGL2 and a Rust/WebAssembly orbit engine.
+description: A devlog on Schwarzschild Lab, a real-time black hole simulator in the browser (per-pixel light-ray tracing in WebGL2 and a Rust/WebAssembly orbit engine), and the Schwarzschild Observatory, a slow synthetic telescope beside it.
 cover: /blog/schwarzschild-lab/gargantua.webp
 demo_cmd: ./schwarzschild-lab
 demo_note: loads a live WebGL2 ray tracer · drag to orbit, scroll to zoom
@@ -426,13 +426,99 @@ But the randomness now comes from a model of how things are distributed in space
 
 ![The galactic centre seen through the black hole: its starlight and dust lane bent into Einstein rings](/blog/schwarzschild-lab/lensed-sky.webp)
 
+# The Observatory
+
+When I wrote the first version of this post, I ended it by saying I did not want a completely accurate scientific observatory simulator, because that would be an enormous project.
+
+Two days later I started building one.
+
+What changed my mind was a simple question the real-time renderer cannot answer: *what would a camera actually record if it pointed at this?* The Lab answers "what does it look like right now?" at 60 frames per second. Every choice in it, the disk brightness, the bloom, the camera 26 M from the hole, is made so the picture looks good. That is fine for a toy. But I kept wanting to know which parts of the picture I could defend.
+
+So [the Schwarzschild Observatory](https://zahintapadar.github.io/schwarzschild-lab/observatory/) is a separate, slow sibling: a progressive synthetic telescope. It lives in its own folder and does not touch the real-time code.
+
+![First Light: a thin disk around a 4.3 million solar-mass hole, seen from 20,000 gravitational radii. A synthetic HDR composite of six registered exposures, not a single frame](/blog/schwarzschild-lab/obs-first-light-hdr.webp)
+
+## Scenes with a real size
+
+The first rule was that every scene has physical scale. The hole has a mass, $4.3 \times 10^6\,M_\odot$ (about Sagittarius A*), and the telescope has a distance. From those two numbers, the observer sits at $r_0 = D / r_g$ gravitational radii, and the shadow and the Einstein ring have definite angular sizes:
+
+$$\sin\alpha_{sh} = \frac{3\sqrt{3}\,\sqrt{1 - 2/r_0}}{r_0}, \qquad \theta_E \to \frac{2}{\sqrt{r_0}}$$
+
+For First Light the telescope is 850 AU away, so the shadow's radius is 53.6″ and the Einstein radius is 48.6′. The real Sgr A* is 8 kpc away and its shadow is 26 microarcseconds, so this is a hypothetical telescope parked very close to the hole. I would rather say that than pretend.
+
+![Left: the real-time Lab, a camera 26 M away with an artistically lit disk. Right: the Observatory at 20,000 M with a physical disk](/blog/schwarzschild-lab/obs-comparison.webp)
+
+## A better integrator
+
+The Lab's shader uses RK4 with a step size I picked by feel. That is fine at 60 fps, but it has no idea how wrong it is.
+
+The Observatory works in the photon's orbital plane instead, with $u = 1/r$:
+
+$$\frac{d^2u}{d\phi^2} = 3Mu^2 - u$$
+
+and integrates it with an adaptive Dormand–Prince 5(4) scheme to a stated tolerance. Working in $u$ has a nice side effect: escaping to infinity is just $u = 0$, which happens at a finite angle, so the ray's final direction on the sky is exact.
+
+Then I tested it against everything I could find an answer for: the exact shadow formula (to $10^{-6}$), the photon orbit, the weak-field deflection $4M/b + \tfrac{15\pi}{4}(M/b)^2$, Bozza's strong-field limit near the critical curve, the Einstein angle, and point-lens theory for extended sources. It also gave me a number I had wanted for a while: the Lab's RK4 and this integrator agree on where rays go to within $3 \times 10^{-4}$ radians.
+
+![Critical Curve Study, a diagnostic: ray fate, with hatched low-confidence pixels, and image parity](/blog/schwarzschild-lab/obs-critical-curve-1.webp)
+
+## The disk is far too bright
+
+In the Lab I chose the disk's brightness. In the Observatory it follows from the accretion rate, using the Page–Thorne thin-disk solution. At 1% of the Eddington rate the code reports $\dot{M} = 1.7 \times 10^{-3}\,M_\odot$ per year and a peak temperature of 86,700 K at $9.55\,M$.
+
+That has an awkward consequence. At 550 nm the disk is about 70 times brighter than the surface of the Sun. A real camera would need an ND 6 solar filter and a 20 µs exposure to keep it under full well, and at that exposure the stars are about $10^{12}$ times too faint to register.
+
+So First Light comes in two versions, and each one says what it is:
+
+![Left: the physical single exposure, 20 µs through ND 6, with a black sky. Right: the HDR composite of six registered frames](/blog/schwarzschild-lab/obs-first-light-pair.webp)
+
+The single exposure is the honest detector frame. The composite merges six frames, from 20 µs through ND 6 up to 120 s unfiltered, in linear units, then applies one global display curve. No local tone mapping, no bloom. It is labelled as a composite in every file it exports.
+
+## Lensing a nebula
+
+The image I most wanted was a nebula behind the hole. So the Observatory generates one: a 24 pc box of turbulent gas, ionised by three massive stars, with the flow evolved by a simple Euler solver, placed 2.5 kpc behind the hole.
+
+![Left: the nebula with lensing off. Right: lensed into an outer arc and a mirrored counter-image carrying the same dust lanes](/blog/schwarzschild-lab/obs-lensed-pair.webp)
+
+The counter-image is mirrored, which the parity diagnostic confirms, and a debug overlay shows the same knots of gas landing in both the arc and the counter-image.
+
+This part had my favourite bug. The gas looked grainy, and a noise index I wrote to measure it said the Hα emission was 0.42 and [S II] was 0.97: worse than noise. The first-order solver leaves a checkerboard pattern at the grid scale, and line emission, which goes as density squared, amplifies it.
+
+I tried two fixes in the solver. Rusanov fluxes smeared the neutral shell into the ionised gas until it recombined. Fourth-order hyperdiffusion erased the turbulence. Neither was kept. What worked was a single [1, 2, 1]/4 filter pass on the stored fields, which removes the checkerboard exactly and leaves real structure almost untouched. Afterwards the indices were 0.078 and 0.19.
+
+![Einstein Ring, structured alignment: the nebula a quarter of an Einstein radius off axis, a nearly complete but uneven ring](/blog/schwarzschild-lab/obs-einstein-ring-structured.webp)
+
+## The deep field that was dark for the wrong reason
+
+The Weak-Lensing Deep Field reuses the synthetic sky from earlier in this post, with a much deeper catalogue in the field of view: 17,800 stars to V = 22 and 6,900 galaxies within a degree.
+
+The first version was dark and noisy, and I assumed the photon counts were wrong. So I wrote a tool that traces every term from magnitude to electrons. The counts were fine. A 22nd-magnitude galaxy already had a signal-to-noise of 18 in an hour.
+
+The problem was the display. The white point sat on bright stars that saturate, so faint galaxies came out at about 3% grey. The black point sat far below the sky, so the sky's own shot noise filled the frame. Fixing the display, and moving to a 30 cm telescope so galaxies are resolved, was the whole fix.
+
+![Left: one hour on a single detector frame. Right: 36 registered 300-second frames](/blog/schwarzschild-lab/obs-deep-field-pair.webp)
+
+## Every image says what it is
+
+The thing I care about most in the Observatory is not a formula. It is labelling.
+
+Every output belongs to one class: fixture, validation, presentation or high quality. The class is earned by the resolution actually rendered, and nothing is upscaled. Every image also says whether it is a physical single exposure, a registered composite, a stacked survey, a diagnostic or false colour, in the PNG, in the FITS header and in a JSON sidecar.
+
+![The same nebula spectra in visible light (left) and as SHO false colour (right)](/blog/schwarzschild-lab/obs-narrowband-visible.webp)
+
+The narrowband image is a good example. The visible-light rendering looks teal, because the eye is about four times more sensitive at [O III] 501 nm than at Hα 656 nm. A camera sees the same nebula as red. Both are correct for their detectors, and the false-colour one says so.
+
+## How slow it is
+
+All on a fanless MacBook Air M4, CPU only. First Light at 1024 × 640 and 256 samples per pixel takes about a minute. The lensed nebula scenes take 6 to 11 minutes, because every ray that passes through the gas has to march through it. 60 unit tests and a fixture test for every preset pass.
+
+The full numbers, and an honest list of what is still approximate, are in the [research log](/blog/schwarzschild-lab-research-log/) and the [findings log](/blog/schwarzschild-lab-findings/).
+
 # What I want the final thing to feel like
 
-I do not want a completely accurate scientific observatory simulator. That would be an enormous project.
+The Lab and the Observatory now answer two different questions, and I want both.
 
-But I also do not want a fake black hole with nice post-processing.
-
-I want something in between:
+The Lab is still the one to play with. It sits in between a fake black hole with nice post-processing and a scientific simulator:
 
 - A black hole whose lensing comes from traced light paths
 - A disk whose colour and asymmetry come from relativistic motion
@@ -440,6 +526,8 @@ I want something in between:
 - A sky that feels vast because it is generated from meaningful distributions
 - Enough controls that someone can experiment without needing to understand every equation
 
-Right now, the project is still very much a work in progress.
+The Observatory is the one that has to justify itself. It is slow, it labels everything, and it keeps a list of what it still gets wrong: a static observer, a thin disk with no corona or jet, a nebula solver with no energy equation, and no spinning black holes. A Kerr hole needs its own validated integrator, and until it has one, nothing in the project gets called Kerr.
+
+Right now, both are still very much a work in progress.
 
 But the best part is that every new piece makes the black hole feel less like a visual effect and more like a place.
