@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 export const TermPrompt: React.FC<{ cmd: string; path?: string }> = ({ cmd, path = '~' }) => (
     <div className="term-prompt">
-        <span style={{ color: '#98c379' }}>zahin@dev</span>
-        <span style={{ color: '#5c6370' }}>:</span>
-        <span style={{ color: '#61afef' }}>{path}</span>
-        <span style={{ color: '#5c6370' }}>$ </span>
+        <span className="term-prompt-user">zahin@dev</span>
+        <span className="term-dim">:</span>
+        <span className="term-prompt-path">{path}</span>
+        <span className="term-dim">$ </span>
         {cmd}
     </div>
 );
