@@ -73,7 +73,7 @@ const ContributionGraph: React.FC = () => {
     }
 
     return (
-        <section className="minimal-section" aria-labelledby="activity-heading">
+        <section id="activity" className="minimal-section" aria-labelledby="activity-heading">
             <h2 id="activity-heading" className="sr-only">github activity</h2>
             <TerminalPanel cmd="gh contributions">
                 <div className="minimal-contrib-header">

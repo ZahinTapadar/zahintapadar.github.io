@@ -4,6 +4,9 @@ import './Blog.css';
 import TerminalPanel, { TermPrompt } from '../components/TerminalPanel';
 import { posts, findPost } from './posts';
 import { renderMarkdown, readingTime, type Post } from './markdown';
+import { usePostStats } from './usePostStats';
+import { StatsMeta, LikeButton } from './PostStats';
+import Comments from './Comments';
 
 const formatDate = (d: string) =>
     d ? new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase() : '';
@@ -108,6 +111,7 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
     );
     const i = posts.indexOf(post);
     const newer = posts[i - 1], older = posts[i + 1];
+    const stats = usePostStats(post.slug);
     const bodyRef = useRef<HTMLDivElement>(null);
     const mathReady = useMath(bodyRef, post.body.includes('$'));
 
@@ -121,6 +125,7 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
                 <div className="post-meta">
                     <span className="term-meta">{formatDate(post.date)}</span>
                     <span>{readingTime(post.body)} min read</span>
+                    <StatsMeta stats={stats} />
                     {post.tags.map((t) => <span key={t} className="post-tag">#{t}</span>)}
                 </div>
                 {(post.project || post.repo) && (
@@ -136,6 +141,12 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
                     </nav>
                 )}
                 <div ref={bodyRef} className={`post-body${mathReady ? ' math-ready' : ''}`}>{nodes}</div>
+                <section className="post-responses" aria-labelledby="comments-heading">
+                    <LikeButton stats={stats} />
+                    <h2 id="comments-heading" className="post-comments-title">comments</h2>
+                    <p className="post-comments-note">sign in with GitHub to comment</p>
+                    <Comments />
+                </section>
             </article>
             <footer className="post-footer">
                 <div>{newer && <a href={`/blog/${newer.slug}/`}>← {newer.title}</a>}</div>

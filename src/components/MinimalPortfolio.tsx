@@ -15,6 +15,7 @@ import lilyImg from '../assets/bgblr2.jpg';
 import ContributionGraph from './ContributionGraph';
 import TechTree from './TechTree';
 import TerminalPanel, { TermPrompt } from './TerminalPanel';
+import SideNav, { type NavItem } from './SideNav';
 import StackOverflow from './games/StackOverflow';
 import GarbageCollector from './games/GarbageCollector';
 import { posts } from '../blog/posts';
@@ -23,13 +24,13 @@ interface MinimalPortfolioProps {
     onToggleMode: () => void;
 }
 
-interface Work { id: number; title: string; year: string; detail?: string; link: string; post?: string }
+interface Work { id: number; slug?: string; title: string; year: string; detail?: string; link: string; post?: string }
 
 // The three current builds lead; everything older sits in a dimmed archive
 const featured: Work[] = [
-    { id: 11, title: 'ATLAS', year: '2026', detail: 'macos time tracker, swift + claude', link: 'https://atlasmac.web.app/' },
-    { id: 10, title: 'Schwarzschild Lab', year: '2026', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
-    { id: 9, title: 'wortraum', year: '2026', detail: 'wordle solver, lua + c + wasm', link: 'https://zahintapadar.github.io/wortraum/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
+    { id: 11, slug: 'atlas', title: 'ATLAS', year: '2026', detail: 'macos time tracker, swift + claude', link: 'https://atlasmac.web.app/' },
+    { id: 10, slug: 'schwarzschild-lab', title: 'Schwarzschild Lab', year: '2026', detail: 'black hole ray tracer, rust/wasm', link: 'https://zahintapadar.github.io/schwarzschild-lab/', post: '/blog/building-a-black-hole-simulator/' },
+    { id: 9, slug: 'wortraum', title: 'wortraum', year: '2026', detail: 'wordle solver, lua + c + wasm', link: 'https://zahintapadar.github.io/wortraum/', post: '/blog/making-a-wordle-solver-that-actually-thinks/' },
 ];
 
 const archive: Work[] = [
@@ -76,6 +77,19 @@ const techGroups = [
     { dir: 'tools', items: ['Neovim', 'IDA Pro', 'Ghidra'] }
 ];
 
+const navItems: NavItem[] = [
+    { id: 'about', label: 'about.txt' },
+    {
+        id: 'projects', label: 'projects/',
+        children: [...featured.map((w) => ({ id: `project-${w.slug}`, label: w.slug!.split('-')[0] })), { id: 'archive', label: 'archive/' }],
+    },
+    { id: 'activity', label: 'activity' },
+    { id: 'writing', label: 'blog/' },
+    { id: 'experience', label: 'experience' },
+    { id: 'stack', label: 'stack/' },
+    { id: 'contact', label: 'contact' },
+];
+
 const Divider: React.FC = () => (
     <div className="minimal-divider" aria-hidden="true">
         <img src={endlineImg} alt="" />
@@ -96,7 +110,7 @@ const SectionHead: React.FC<{ icon: string; title: string }> = ({ icon, title })
 );
 
 const About: React.FC = () => (
-    <section className="minimal-section" aria-labelledby="about-heading">
+    <section id="about" className="minimal-section" aria-labelledby="about-heading">
         <h2 id="about-heading" className="sr-only">about</h2>
         <TerminalPanel cmd="cat about.txt">
             <p className="term-text term-text-lead">hey, i'm zahin.</p>
@@ -123,11 +137,11 @@ const About: React.FC = () => (
 );
 
 const Projects: React.FC = () => (
-    <section className="minimal-section">
+    <section id="projects" className="minimal-section">
         <SectionHead icon={iconFolder} title="projects" />
         <TerminalPanel cmd="ls ~/projects">
             {featured.map(work => (
-                <div key={work.id} className="term-feature">
+                <div key={work.id} id={`project-${work.slug}`} className="term-feature">
                     <div className="term-feature-title">
                         <a href={work.link} target="_blank" rel="noopener noreferrer">{work.title}</a>
                         <span className="term-meta">{work.year}</span>
@@ -138,7 +152,7 @@ const Projects: React.FC = () => (
                     </div>
                 </div>
             ))}
-            <TermPrompt cmd="ls ~/projects/archive" />
+            <div id="archive"><TermPrompt cmd="ls ~/projects/archive" /></div>
             {archive.map(work => (
                 <div key={work.id} className="term-ls-row term-archive">
                     <span className="term-meta">{work.year}</span>
@@ -150,7 +164,7 @@ const Projects: React.FC = () => (
 );
 
 const Writing: React.FC = () => (
-    <section className="minimal-section">
+    <section id="writing" className="minimal-section">
         <SectionHead icon={iconblog} title="writing" />
         <TerminalPanel cmd="ls -t ~/blog">
             {posts.map(post => (
@@ -167,7 +181,7 @@ const Writing: React.FC = () => (
 );
 
 const Experience: React.FC = () => (
-    <section className="minimal-section">
+    <section id="experience" className="minimal-section">
         <SectionHead icon={iconComputer} title="experience" />
         <TerminalPanel cmd="git log career">
             {expItems.map(item => (
@@ -185,14 +199,14 @@ const Experience: React.FC = () => (
 );
 
 const Stack: React.FC = () => (
-    <section className="minimal-section">
+    <section id="stack" className="minimal-section">
         <SectionHead icon={techstackImg} title="tech stack" />
         <TechTree groups={techGroups} />
     </section>
 );
 
 const Contact: React.FC = () => (
-    <section className="minimal-section" aria-labelledby="contact-heading">
+    <section id="contact" className="minimal-section" aria-labelledby="contact-heading">
         <h2 id="contact-heading" className="sr-only">contact</h2>
         <TerminalPanel cmd="./contact">
             <p className="term-text">
@@ -234,6 +248,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
     return (
         <div className="minimal-portfolio">
+            <SideNav items={navItems} />
             <div className="minimal-container">
                 <header className="minimal-header">
                     <span>EST. 2019</span>
