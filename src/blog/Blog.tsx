@@ -7,6 +7,7 @@ import { renderMarkdown, readingTime, type Post } from './markdown';
 import { usePostStats } from './usePostStats';
 import { StatsMeta, LikeButton } from './PostStats';
 import Comments from './Comments';
+import SideNav, { type NavItem } from '../components/SideNav';
 
 const formatDate = (d: string) =>
     d ? new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase() : '';
@@ -112,12 +113,24 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
     const i = posts.indexOf(post);
     const newer = posts[i - 1], older = posts[i + 1];
     const stats = usePostStats(post.slug);
+    const sections = headings.filter((h) => h.level === 2);
+    // Sections with their subsections, plus the comments at the end
+    const outline = useMemo<NavItem[]>(() => {
+        const out: NavItem[] = [];
+        for (const h of headings) {
+            if (h.level === 2) out.push({ id: h.id, label: h.text.toLowerCase(), children: [] });
+            else out[out.length - 1]?.children?.push({ id: h.id, label: h.text.toLowerCase() });
+        }
+        out.push({ id: 'comments-heading', label: 'comments' });
+        return out;
+    }, [headings]);
     const bodyRef = useRef<HTMLDivElement>(null);
     const mathReady = useMath(bodyRef, post.body.includes('$'));
 
     return (
         <>
             <Header path={`~/blog/${post.slug}`} />
+            <SideNav items={outline} root="post.md" side="right" collapse label="on this page" />
             <article className="post">
                 <a href="/blog/" className="blog-back">cd ..</a>
                 <h1 className="blog-title">{post.title}</h1>
@@ -134,18 +147,18 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
                         {post.repo && <a className="term-chip term-chip-link" href={post.repo} target="_blank" rel="noopener noreferrer">source ↗</a>}
                     </div>
                 )}
-                {headings.length > 2 && (
+                {sections.length > 2 && (
                     <nav className="post-toc">
                         <TermPrompt cmd="grep '^#' post.md" />
-                        <ol>{headings.map((h) => <li key={h.id}><a href={`#${h.id}`}>{h.text}</a></li>)}</ol>
+                        <ol>{sections.map((h) => <li key={h.id}><a href={`#${h.id}`}>{h.text}</a></li>)}</ol>
                     </nav>
                 )}
                 <div ref={bodyRef} className={`post-body${mathReady ? ' math-ready' : ''}`}>{nodes}</div>
                 <section className="post-responses" aria-labelledby="comments-heading">
                     <LikeButton stats={stats} />
                     <h2 id="comments-heading" className="post-comments-title">comments</h2>
-                    <p className="post-comments-note">sign in with GitHub to comment</p>
-                    <Comments />
+                    <p className="post-comments-note">no account needed. be kind; comments are plain text.</p>
+                    <Comments slug={post.slug} />
                 </section>
             </article>
             <footer className="post-footer">

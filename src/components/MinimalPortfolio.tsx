@@ -248,7 +248,7 @@ const MinimalPortfolio: React.FC<MinimalPortfolioProps> = ({ onToggleMode }) => 
 
     return (
         <div className="minimal-portfolio">
-            <SideNav items={navItems} />
+            <SideNav items={navItems} root="~/zahin" />
             <div className="minimal-container">
                 <header className="minimal-header">
                     <span>EST. 2019</span>

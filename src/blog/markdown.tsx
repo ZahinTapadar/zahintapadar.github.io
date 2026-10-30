@@ -72,7 +72,7 @@ function inline(text: string, key = 0): React.ReactNode[] {
     return out;
 }
 
-export interface Heading { id: string; text: string }
+export interface Heading { id: string; text: string; level: 2 | 3 }
 
 // Custom blocks: a line `::component-name` is handed to `components`.
 export function renderMarkdown(
@@ -121,7 +121,7 @@ export function renderMarkdown(
         if (h) {
             const level = h[1].length + 1;              // # in a post is an h2: the page owns h1
             const id = slugify(h[2]);
-            if (level === 2) headings.push({ id, text: h[2] });
+            if (level === 2 || level === 3) headings.push({ id, text: h[2], level });
             nodes.push(React.createElement(`h${Math.min(level, 5)}`, { key: key++, id }, inline(h[2])));
             i++;
             continue;

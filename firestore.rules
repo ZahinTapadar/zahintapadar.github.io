@@ -1,8 +1,8 @@
 rules_version = '2';
 
-// Blog counters: one document per post at posts/{slug} with `views` and `likes`.
-// Anyone can read them. A write may only add one view, or add/remove one like,
-// and may not touch anything else.
+// Blog data: one document per post at posts/{slug} with `views` and `likes`,
+// and anonymous comments under posts/{slug}/comments. Anyone can read. A
+// counter write may only add one view, or add/remove one like.
 service cloud.firestore {
   match /databases/{database}/documents {
     match /posts/{slug} {
@@ -22,6 +22,23 @@ service cloud.firestore {
             && (request.resource.data.get('likes', 0) - resource.data.get('likes', 0)) in [1, -1]
             && request.resource.data.get('likes', 0) >= 0)
         );
+
+      // Anonymous comments: plain text, a short optional name, server time.
+      // Nobody can edit or delete from the site; moderate in the console.
+      match /comments/{commentId} {
+        allow read: if true;
+
+        allow create: if slug.matches('^[a-z0-9-]{1,100}$')
+          && request.resource.data.keys().hasOnly(['name', 'body', 'createdAt'])
+          && request.resource.data.name is string
+          && request.resource.data.name.size() <= 40
+          && request.resource.data.body is string
+          && request.resource.data.body.size() >= 1
+          && request.resource.data.body.size() <= 2000
+          && request.resource.data.createdAt == request.time;
+
+        allow update, delete: if false;
+      }
     }
   }
 }
