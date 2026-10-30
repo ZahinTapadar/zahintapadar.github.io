@@ -73,16 +73,18 @@ const ContributionGraph: React.FC = () => {
     }
 
     return (
-        <section className="minimal-section">
+        <section className="minimal-section" aria-labelledby="activity-heading">
+            <h2 id="activity-heading" className="sr-only">github activity</h2>
             <TerminalPanel cmd="gh contributions">
                 <div className="minimal-contrib-header">
                     <a href={`https://github.com/${GITHUB_USER}`} target="_blank" rel="noopener noreferrer">github.com/{GITHUB_USER}</a>
-                    <span className="minimal-project-year">
+                    <span className="term-meta">
                         {total !== null ? `${total} contributions in the last year` : failed ? 'graph unavailable' : 'loading...'}
                     </span>
                 </div>
 
-                <div>
+                {/* The total above is the readable summary; the grid itself is visual only */}
+                <div aria-hidden="true">
                     <div className="minimal-contrib-scroll" ref={scrollRef}>
                         <div className="minimal-contrib-grid">
                             {weeks.map((week, w) => {
@@ -121,11 +123,11 @@ const ContributionGraph: React.FC = () => {
                 {contributions.map(c => (
                     <div key={c.repo} className="minimal-project" style={{ marginBottom: '0.75rem' }}>
                         <div className="minimal-project-header">
-                            <a href={c.link} target="_blank" rel="noopener noreferrer" className="minimal-project-title">{c.repo}</a>
-                            <span className="minimal-project-year">[{c.date}]</span>
+                            <a href={c.link} target="_blank" rel="noopener noreferrer">{c.repo}</a>
+                            <span className="term-meta">{c.date}</span>
                         </div>
                         <div className="minimal-role">
-                            {c.stars && <span style={{ color: '#e5c07b' }}>★ {c.stars} </span>}
+                            {c.stars && <span>★ {c.stars} </span>}
                             ({c.what})
                         </div>
                     </div>

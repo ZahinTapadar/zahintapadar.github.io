@@ -1,20 +1,55 @@
+/* Normal mode. One accent (the contribution green) on grays; colour means
+   "you can click this" or "this is a directory", nothing else. */
 .minimal-portfolio {
-  background-color: #000000;
-  color: #dddddd;
+  --bg: #000000;
+  --fg: #e6e6e6;
+  --fg-2: #abb2bf;
+  --dim: #7f848e;           /* 5.3:1 on black: secondary text that still passes AA */
+  --line: #444444;
+  --accent: #98c379;
+  --accent-rgb: 152, 195, 121;
+
+  background-color: var(--bg);
+  color: var(--fg);
   font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Courier New', Courier, monospace;
   min-height: 100vh;
   padding: 2rem;
   line-height: 1.6;
-  font-size: 14px;
+  font-size: 15px;
+  caret-color: var(--accent);
+}
+
+.minimal-portfolio ::selection {
+  background: rgba(var(--accent-rgb), 0.3);
+  color: #ffffff;
+}
+
+.minimal-portfolio :focus-visible {
+  outline: 1px dashed var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .minimal-container {
+  position: relative;
   max-width: 800px;
   margin: 0 auto;
 }
 
-.minimal-portfolio h1, 
-.minimal-portfolio h2, 
+.minimal-portfolio h1,
+.minimal-portfolio h2,
 .minimal-portfolio h3 {
   font-weight: normal;
   color: #ffffff;
@@ -27,32 +62,92 @@
 }
 
 .minimal-portfolio a {
-  color: #61afef; /* Emacs-like blue */
+  color: var(--accent);
   text-decoration: none;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
 }
 
 .minimal-portfolio a:hover {
   text-decoration: underline;
 }
 
+/* Header and identity */
 .minimal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   margin-bottom: 3rem;
-  border-bottom: 1px dashed #444;
+  border-bottom: 1px dashed var(--line);
   padding-bottom: 1rem;
+  color: var(--dim);
+  font-size: 0.87em;
+  font-variant-numeric: tabular-nums;
+}
+
+.minimal-identity {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.minimal-identity-main {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.minimal-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.minimal-name-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.minimal-portfolio .minimal-name-row h1 {
+  font-size: 2.2em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.minimal-name-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.minimal-handle {
+  color: var(--dim);
+  font-size: 1.1em;
+  margin-top: 0.15rem;
+}
+
+.minimal-role-line {
+  color: var(--fg-2);
+  margin-top: 0.35rem;
 }
 
 .minimal-nav {
   display: flex;
   gap: 1rem;
+  margin-left: auto;
 }
 
 .minimal-nav button {
   background: none;
   border: none;
-  color: #e5c07b; /* Emacs-like yellow */
+  color: var(--accent);
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
@@ -61,15 +156,67 @@
 
 .minimal-nav button:hover {
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
+/* Sections, headings, dividers and artwork */
 .minimal-section {
   margin-bottom: 3rem;
 }
 
+.minimal-section-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 2.5rem 0 1rem;
+}
+
+.minimal-portfolio .minimal-section-head h2 {
+  margin: 0;
+}
+
+.minimal-heading-icon {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+}
+
 .minimal-divider {
-  color: #444;
-  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.minimal-divider img {
+  width: 100%;
+  max-width: 400px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+}
+
+/* Artwork is a pause between sections, never a background: centred,
+   grayscale, and always in the same slot between two sections */
+.minimal-artwork {
+  margin: 3.5rem auto;
+  max-width: 400px;
+}
+
+.minimal-artwork.is-wide {
+  max-width: none;
+}
+
+.minimal-artwork img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.minimal-project-title {
+  color: var(--fg);
 }
 
 .minimal-project {
@@ -78,33 +225,14 @@
 
 .minimal-project-header {
   display: flex;
-  align-items:baseline;
-  gap: 1rem;
-}
-
-.minimal-project-title {
-  color: #e06c75; /* Emacs-like red/pink */
-  font-size: 1.1em;
-}
-
-.minimal-project-year {
-  color: #5c6370;
-  font-size: 0.9em;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 1rem;
 }
 
 .minimal-role {
-  color: #98c379; /* Emacs-like green */
+  color: var(--fg-2);
   font-size: 0.9em;
-}
-
-.minimal-experience-item {
-  margin-bottom: 1.5rem;
-}
-
-.minimal-socials {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
 }
 
 /* Ending area: spans the full viewport and runs to the bottom of the page,
@@ -145,24 +273,42 @@
   }
 }
 
-.minimal-aesthetic-img {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 4px;
+.minimal-eof-mark {
+  color: var(--dim);
+  font-style: italic;
+  margin: 0;
 }
 
-.minimal-heading-icon {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  flex-shrink: 0;
+.minimal-play-btn {
   display: block;
+  margin: 4rem auto 0;
+  padding: 6px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.minimal-play-btn:hover,
+.minimal-play-btn:focus-visible {
+  opacity: 1;
+}
+
+.minimal-play-btn img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 @media (max-width: 600px) {
   .minimal-portfolio {
     padding: 1rem;
+  }
+  .minimal-avatar {
+    width: 72px;
+    height: 72px;
   }
 }
 
@@ -201,13 +347,13 @@
 
 .minimal-play-header h3 {
   margin: 0;
-  color: #98c379;
+  color: var(--accent);
 }
 
 .minimal-play-header button {
   background: none;
   border: none;
-  color: #e06c75;
+  color: var(--fg-2);
   cursor: pointer;
   font-family: inherit;
   font-size: 1em;
@@ -215,6 +361,7 @@
 }
 
 .minimal-play-header button:hover {
+  color: var(--accent);
   text-decoration: underline;
 }
 
@@ -233,19 +380,19 @@
 }
 
 .minimal-play-options button {
-  background: linear-gradient(135deg, rgba(97, 175, 239, 0.16), rgba(97, 175, 239, 0.04));
-  border: 1px solid #61afef;
-  color: #61afef;
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.16), rgba(var(--accent-rgb), 0.04));
+  border: 1px solid var(--accent);
+  color: var(--accent);
   padding: 0.75rem 1.5rem;
   cursor: pointer;
   font-family: inherit;
   font-size: 1.1em;
   border-radius: 4px;
-  transition: all 0.2s;
+  transition: background 0.2s;
 }
 
 .minimal-play-options button:hover {
-  background: linear-gradient(135deg, rgba(97, 175, 239, 0.3), rgba(97, 175, 239, 0.1));
+  background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.3), rgba(var(--accent-rgb), 0.1));
 }
 
 .minimal-game-canvas {
@@ -256,6 +403,21 @@
   touch-action: none;
   cursor: pointer;
   display: block;
+}
+
+.minimal-play-back {
+  margin-top: 1rem;
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.minimal-play-back:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Contribution graph */
@@ -287,10 +449,10 @@
 }
 
 .minimal-contrib-month {
-  height: 14px;
-  font-size: 10px;
-  line-height: 14px;
-  color: #5c6370;
+  height: 16px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--dim);
   white-space: nowrap;
   width: 11px;
   overflow: visible;
@@ -312,10 +474,10 @@
 }
 
 .minimal-contrib-cell.empty { background: transparent; }
-.minimal-contrib-cell.level-1 { background: rgba(152, 195, 121, 0.3); }
-.minimal-contrib-cell.level-2 { background: rgba(152, 195, 121, 0.55); }
-.minimal-contrib-cell.level-3 { background: rgba(152, 195, 121, 0.8); }
-.minimal-contrib-cell.level-4 { background: #98c379; }
+.minimal-contrib-cell.level-1 { background: rgba(var(--accent-rgb), 0.3); }
+.minimal-contrib-cell.level-2 { background: rgba(var(--accent-rgb), 0.55); }
+.minimal-contrib-cell.level-3 { background: rgba(var(--accent-rgb), 0.8); }
+.minimal-contrib-cell.level-4 { background: var(--accent); }
 
 @keyframes contrib-pop {
   to {
@@ -338,8 +500,8 @@
   align-items: center;
   gap: 3px;
   margin-top: 0.5rem;
-  font-size: 11px;
-  color: #5c6370;
+  font-size: 12px;
+  color: var(--dim);
 }
 
 .minimal-contrib-legend span:first-child { margin-right: 4px; }
@@ -347,15 +509,23 @@
 
 /* Terminal panels: every normal-mode section is a boxed shell session */
 .term-panel {
-  border: 1px dashed #444;
+  border: 1px dashed var(--line);
   border-radius: 4px;
   padding: 1rem 1.25rem;
   background: linear-gradient(180deg, #0b0d10 0%, #000 100%);
 }
 
 .term-prompt {
-  color: #dddddd;
+  color: var(--fg);
   margin-bottom: 0.5rem;
+}
+
+.term-prompt-user {
+  color: var(--accent);
+}
+
+.term-prompt-path {
+  color: var(--fg-2);
 }
 
 .term-row > .term-prompt {
@@ -372,15 +542,48 @@
 
 .term-text {
   margin: 0 !important;
-  color: #abb2bf;
+  color: var(--fg-2);
 }
 
-.term-hl {
-  border-bottom: 1px dashed currentColor;
+.term-text-lead {
+  color: #ffffff;
 }
 
-.term-dim {
-  color: #5c6370;
+.term-dim,
+.term-meta {
+  color: var(--dim);
+}
+
+.term-meta {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Featured projects: name, year, one line of what it is */
+.term-feature {
+  padding: 0.35rem 0;
+}
+
+.term-feature-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.term-feature-title a {
+  font-size: 1.15em;
+}
+
+.term-feature-detail {
+  color: var(--fg-2);
+  font-size: 0.92em;
+}
+
+.term-archive a {
+  color: var(--fg-2);
+}
+
+.term-archive a:hover {
+  color: var(--accent);
 }
 
 .term-chips {
@@ -408,6 +611,16 @@
 .term-chip-link {
   cursor: pointer;
   text-decoration: none !important;
+}
+
+.term-chip-plain {
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--fg-2) !important;
+}
+
+.term-chip-plain:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .term-chip-img {
@@ -439,7 +652,7 @@
 
 /* git log rows */
 .term-log-desc {
-  color: #abb2bf;
+  color: var(--fg-2);
   padding-left: 1rem;
   border-left: 1px solid #333;
   margin: 0.35rem 0 0.25rem 0.4rem;
@@ -480,5 +693,22 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+.term-chip-img img {
+  display: block;
+  height: 1.5rem;
+  width: auto;
+}
+
+/* Bigger touch targets where there is no mouse */
+@media (pointer: coarse) {
+  .term-chip {
+    padding: 0.3rem 0.65rem;
+  }
+  .term-ls-row,
+  .term-feature {
+    padding-block: 0.45rem;
   }
 }

@@ -77,7 +77,7 @@ function useMath(ref: React.RefObject<HTMLElement | null>, enabled: boolean) {
 const Header: React.FC<{ path: string }> = ({ path }) => (
     <header className="minimal-header">
         <a href="/" className="blog-home">zahin</a>
-        <span style={{ color: '#5c6370' }}>{path}</span>
+        <span className="term-dim">{path}</span>
     </header>
 );
 
@@ -89,7 +89,7 @@ const PostIndex: React.FC = () => (
         <TerminalPanel cmd="ls -t ~/blog">
             {posts.map((p) => (
                 <a key={p.slug} href={`/blog/${p.slug}/`} className="blog-index-row">
-                    <span style={{ color: '#e5c07b' }}>{formatDate(p.date)}</span>
+                    <span className="term-meta">{formatDate(p.date)}</span>
                     <span>
                         <span className="minimal-project-title">{p.title}</span>
                         {p.subtitle && <span className="minimal-role"> — {p.subtitle}</span>}
@@ -119,12 +119,12 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
                 <h1 className="blog-title">{post.title}</h1>
                 {post.subtitle && <p className="post-subtitle">{post.subtitle}</p>}
                 <div className="post-meta">
-                    <span style={{ color: '#e5c07b' }}>{formatDate(post.date)}</span>
+                    <span className="term-meta">{formatDate(post.date)}</span>
                     <span>{readingTime(post.body)} min read</span>
                     {post.tags.map((t) => <span key={t} className="post-tag">#{t}</span>)}
                 </div>
                 {(post.project || post.repo) && (
-                    <div className="term-chips post-links" style={{ '--accent': '#61afef' } as React.CSSProperties}>
+                    <div className="term-chips post-links">
                         {post.project && <a className="term-chip term-chip-link" href={post.project} target="_blank" rel="noopener noreferrer">live demo ↗</a>}
                         {post.repo && <a className="term-chip term-chip-link" href={post.repo} target="_blank" rel="noopener noreferrer">source ↗</a>}
                     </div>

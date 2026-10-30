@@ -16,7 +16,7 @@
 }
 
 .blog-back {
-  color: #5c6370 !important;
+  color: var(--dim) !important;
 }
 
 .blog-back::before {
@@ -38,7 +38,7 @@
 
 .blog-index-tags {
   display: block;
-  color: #5c6370;
+  color: var(--dim);
   font-size: 0.9em;
 }
 
@@ -53,7 +53,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
-  color: #5c6370;
+  color: var(--dim);
   border-bottom: 1px dashed #444;
   padding-bottom: 1rem;
   margin-bottom: 1rem;
@@ -83,7 +83,7 @@
 .post-toc ol {
   margin: 0.25rem 0 0;
   padding-left: 1.5rem;
-  color: #5c6370;
+  color: var(--dim);
 }
 
 /* body */
@@ -101,12 +101,12 @@
 
 .post-body h2::before {
   content: '## ';
-  color: #5c6370;
+  color: var(--dim);
 }
 
 .post-body h3::before {
   content: '### ';
-  color: #5c6370;
+  color: var(--dim);
 }
 
 .post-body p {
@@ -175,7 +175,7 @@
   top: 0.35rem;
   right: 0.6rem;
   font-size: 11px;
-  color: #5c6370;
+  color: var(--dim);
 }
 
 .post-body blockquote {
@@ -208,7 +208,7 @@
 
 .post-figure figcaption,
 .post-embed figcaption {
-  color: #5c6370;
+  color: var(--dim);
   font-size: 0.85em;
   margin-top: 0.6rem;
   text-align: center;
@@ -286,7 +286,7 @@
 }
 
 .blog-eof {
-  color: #5c6370;
+  color: var(--dim);
   font-style: italic;
   text-align: center;
   margin: 3rem 0 2rem;
