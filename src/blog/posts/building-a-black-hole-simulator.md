@@ -434,7 +434,7 @@ Two days later I started building one.
 
 What changed my mind was a simple question the real-time renderer cannot answer: *what would a camera actually record if it pointed at this?* The Lab answers "what does it look like right now?" at 60 frames per second. Every choice in it, the disk brightness, the bloom, the camera 26 M from the hole, is made so the picture looks good. That is fine for a toy. But I kept wanting to know which parts of the picture I could defend.
 
-So [the Schwarzschild Observatory](https://zahintapadar.github.io/schwarzschild-lab/observatory/) is a separate, slow sibling: a progressive synthetic telescope. It lives in its own folder and does not touch the real-time code.
+So [the Schwarzschild Observatory](https://zahintapadar.github.io/schwarzschild-lab/observatory/) is a separate, slow sibling: a progressive synthetic telescope. It lives in its own folder and does not touch the real-time code. This section is the short version; the full story is in [Building a Synthetic Telescope](/blog/building-a-synthetic-telescope/).
 
 ![First Light: a thin disk around a 4.3 million solar-mass hole, seen from 20,000 gravitational radii. A synthetic HDR composite of six registered exposures, not a single frame](/blog/schwarzschild-lab/obs-first-light-hdr.webp)
 
