@@ -21,7 +21,7 @@ So this round asks a new question:
 
 That became the [Multiwavelength Survey](https://zahintapadar.github.io/schwarzschild-lab/observatory/survey.html), a new part of the Observatory with two generated scenes, pillars and a supercluster, and eight kinds of instrument.
 
-# Instruments, not telescopes
+# The instruments
 
 The black-hole scenes are about one telescope pointed somewhere unusual. Here the interesting part is the *instrument*: what physics a band is sensitive to.
 
