@@ -30,7 +30,7 @@ The first version had the pieces you would expect:
 - a sensor model with quantum efficiency, filters, a point-spread function and Poisson noise,
 - a progressive loop that can stop, checkpoint and resume.
 
-## Spectra, not colours
+## Carrying a spectrum
 
 Every sample carries 26 channels of photon radiance: 20 continuum bins from 350 to 1000 nm, plus six emission lines (Hα, Hβ, [O III] 495.9/500.7, [N II], [S II]). Colour only happens at the very end, when a filter curve and a quantum efficiency curve turn photons into electrons.
 
