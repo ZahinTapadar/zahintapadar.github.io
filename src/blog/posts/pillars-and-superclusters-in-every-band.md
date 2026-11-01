@@ -1,11 +1,11 @@
 ---
 title: Pillars and Superclusters in Every Band
-subtitle: a multiwavelength survey devlog
+subtitle: what each instrument sees, and why they disagree
 date: 2026-11-01
 tags: physics, astronomy, cosmology, rendering, rust, webassembly
 project: https://zahintapadar.github.io/schwarzschild-lab/observatory/survey.html
 repo: https://github.com/ZahinTapadar/schwarzschild-lab
-description: A devlog on the Schwarzschild Observatory's Multiwavelength Survey: generated pillars and a supercluster, observed in optical, near- and mid-infrared, sub-millimetre, radio, X-ray, microwave and weak lensing, with every band computed from the same physical state.
+description: A devlog on the Schwarzschild Observatory's Multiwavelength Survey: generated pillars and a supercluster, observed in optical, near- and mid-infrared, sub-millimetre, radio, X-ray, microwave and weak lensing, with every band computed from the same physical state, and every image turned into sound.
 cover: /blog/schwarzschild-lab/survey-pillars-nircam.webp
 ---
 
@@ -189,6 +189,45 @@ Only the zoomed-in cluster core, with a deeper survey of 30 galaxies per arcmin�
 
 The same thing happens with the warm–hot gas in the filaments. It holds a large share of the universe's ordinary matter, and in this simulation, as in reality, it is below the noise of every instrument.
 
+# Every image has a sound
+
+NASA and ESA have been turning telescope images into sound for a few years. [NASA's sonifications](https://science.nasa.gov/mission/hubble/multimedia/sonifications/) of the Pillars of Creation, the Bullet Cluster and the Crab are some of my favourite things they publish. So every image in the survey now has an audio twin.
+
+The first thing to say is the same thing NASA says: **these are not sounds from space.** Light at these wavelengths makes no sound, and these scenes are synthetic anyway. A sonification is a mapping from data to sound, and like a false-colour image it is only honest if it says what the mapping is.
+
+![The pillars, every instrument at once: a line sweeps left to right; pitch is height, volume is brightness](/blog/schwarzschild-lab/survey-pillars-survey.mp4)
+
+I copied NASA's conventions rather than inventing my own, so anyone who has heard theirs can read these:
+
+- **Time is position.** A line sweeps the image left to right (the pillars, the cluster core), or an arm turns clockwise from 12 o'clock (the supercluster, like NASA's Cat's Eye).
+- **Pitch is height** in a sweep, and distance from the centre in a radar scan.
+- **Volume is brightness**, after the same stretch the picture uses, gated just above the background so detector noise does not hiss.
+- **Stereo follows the image**: light on the left is heard on the left.
+- **Each instrument has its own register and timbre.** Radio and lensing mass are a low sine hum, cold dust a soft pad, infrared woodwind-like, optical string-like, and X-rays a bright brassy tone at the top. That ordering, radio lowest and X-ray highest, is what NASA uses for M87, the Crab and the Bullet Cluster. Within one instrument, bluer bands are higher.
+- **Compact sources are notes.** Stars, galaxies and X-ray point sources play bell-like notes on a pentatonic scale when the line reaches them. The diffuse gas is a drone underneath.
+
+![The near-infrared camera alone: its five bands as voices, F444W lowest and F090W highest](/blog/schwarzschild-lab/survey-pillars-nircam.mp4)
+
+Under the hood it is additive synthesis: 48 pitch bins per voice, each a pair of slightly detuned wavetable oscillators whose loudness follows the image column by column. Every WAV comes with a JSON file listing its scan, registers, timbres and the number of notes.
+
+## Noise is not music
+
+My first version played 300 notes for the pillars' X-ray image. The scene has 34 young stars, and most of them are too buried in dust to be seen. The other notes were Poisson noise: single photons that happened to be local maxima.
+
+So a note now has to earn it, the way a detection does. A compact source must stand 5σ above its *local* background in a 3 × 3 box, and an X-ray source needs at least 6 counts. My second attempt used the global median as the background, which still let the bright cavity "detect" itself 150 times. With the local background measured on a ring around each peak, the soft X-ray band went from 300 notes to 9.
+
+## Two cluster pieces
+
+![The cluster core: lensing mass lowest, then radio, galaxies and X-ray gas at the top](/blog/schwarzschild-lab/survey-cluster-core-survey.mp4)
+
+The cluster core is a direct nod to NASA's Bullet Cluster piece, with mass in the lowest register, the galaxies in the middle and the hot gas on top. Two things are audible that are hard to see. The SZ decrement and the lensing mass are played with their sign flipped, so the cluster's shadow in the microwave sky becomes a swell. And the two radio relics are two short bursts in the radio register, one at each end of the sweep.
+
+![The supercluster, as a radar: an arm turns clockwise from 12 o'clock; pitch rises with distance from the centre](/blog/schwarzschild-lab/survey-supercluster-survey.mp4)
+
+The supercluster is played as a radar sweep around its centre, because its structure is about distance from the core, not left and right.
+
+The [survey page](https://zahintapadar.github.io/schwarzschild-lab/observatory/survey.html) has a **Listen** button under the image. It synthesises the sound in the browser, and a line moves across the picture with it. Five new tests pin the mapping down: a bright column sounds when the line reaches it and on the right side, a higher row is a higher pitch, brighter is louder with no clipping, a single point source is exactly one note at its time, and the radar turns clockwise from 12 o'clock.
+
 # Honest colour
 
 All of the multi-band images are false colour, and every one says so in its legend. A few rules kept them honest:
@@ -217,7 +256,7 @@ The survey runs in the browser with the same code. One worker generates the scen
 | Pillars, 64³, 512 × 320, browser | 16 s |
 | Cluster core, 128³, 1024 × 640, browser | 51 s |
 
-There are 18 new tests, on top of the Observatory's 60. All of them, and the fixture test, pass.
+There are 23 new tests, on top of the Observatory's 60. All of them, and the fixture test, pass.
 
 # What it still gets wrong
 

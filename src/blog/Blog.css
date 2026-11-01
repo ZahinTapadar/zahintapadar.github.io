@@ -198,7 +198,8 @@
   margin: 2rem 0;
 }
 
-.post-figure img {
+.post-figure img,
+.post-figure video {
   display: block;
   width: 100%;
   height: auto;

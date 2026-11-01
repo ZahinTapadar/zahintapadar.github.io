@@ -1,6 +1,6 @@
 ---
 title: Making a Wordle Solver That Actually Thinks
-subtitle: not a tutorial, just a devlog
+subtitle: guessing by information, not by luck
 date: 2026-10-23
 tags: algorithms, c, lua, webassembly
 project: https://zahintapadar.github.io/wortraum/

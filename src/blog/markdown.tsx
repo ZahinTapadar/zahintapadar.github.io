@@ -152,9 +152,13 @@ export function renderMarkdown(
         }
         const img = line.match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/);
         if (img) {
+            // ![caption](file.mp4) is a video with sound (e.g. a sonification), same figure styling
+            const video = /\.(mp4|webm)$/i.test(img[2]);
             nodes.push(
                 <figure key={key++} className="post-figure">
-                    <img src={img[2]} alt={img[1]} loading="lazy" />
+                    {video
+                        ? <video src={img[2]} controls preload="metadata" playsInline aria-label={img[1]} />
+                        : <img src={img[2]} alt={img[1]} loading="lazy" />}
                     {img[1] && <figcaption>{img[1]}</figcaption>}
                 </figure>,
             );

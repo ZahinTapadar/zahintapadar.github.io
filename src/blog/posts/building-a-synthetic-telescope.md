@@ -1,6 +1,6 @@
 ---
 title: Building a Synthetic Telescope
-subtitle: the Schwarzschild Observatory devlog
+subtitle: what a camera would actually record
 date: 2026-11-01
 tags: physics, astronomy, rendering, rust, webassembly
 project: https://zahintapadar.github.io/schwarzschild-lab/observatory/

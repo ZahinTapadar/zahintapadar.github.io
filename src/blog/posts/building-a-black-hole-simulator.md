@@ -1,6 +1,6 @@
 ---
 title: Building a Black Hole Simulator
-subtitle: not a tutorial, just a devlog
+subtitle: bending light in real time
 date: 2026-10-23
 tags: graphics, physics, rust, webassembly, webgl
 project: https://zahintapadar.github.io/schwarzschild-lab/
