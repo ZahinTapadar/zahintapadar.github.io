@@ -126,15 +126,24 @@ const PostView: React.FC<{ post: Post }> = ({ post }) => {
     }, [headings]);
     const bodyRef = useRef<HTMLDivElement>(null);
     const mathReady = useMath(bodyRef, post.body.includes('$'));
+    // Front matter `banner` overrides the cover when the cover is a wide strip
+    const banner = post.meta.banner ?? post.cover;
 
     return (
         <>
+            {banner && (
+                <div className="post-hero-art" aria-hidden="true">
+                    <img src={banner} alt="" fetchPriority="high" style={{ objectPosition: post.meta.banner_pos, opacity: post.meta.banner_opacity }} />
+                </div>
+            )}
             <Header path={`~/blog/${post.slug}`} />
             <SideNav items={outline} root="post.md" side="right" collapse label="on this page" />
-            <article className="post">
-                <a href="/blog/" className="blog-back">cd ..</a>
-                <h1 className="blog-title">{post.title}</h1>
-                {post.subtitle && <p className="post-subtitle">{post.subtitle}</p>}
+            <article className={banner ? 'post has-hero' : 'post'}>
+                <div className="post-hero">
+                    <a href="/blog/" className="blog-back">cd ..</a>
+                    <h1 className="blog-title">{post.title}</h1>
+                    {post.subtitle && <p className="post-subtitle">{post.subtitle}</p>}
+                </div>
                 <div className="post-meta">
                     <span className="term-meta">{formatDate(post.date)}</span>
                     <span>{readingTime(post.body)} min read</span>

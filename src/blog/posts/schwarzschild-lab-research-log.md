@@ -7,6 +7,7 @@ project: https://zahintapadar.github.io/schwarzschild-lab/
 repo: https://github.com/ZahinTapadar/schwarzschild-lab
 description: The research log behind Schwarzschild Lab and the Schwarzschild Observatory: the physics each part rests on, the approaches I tried and dropped, and the questions still open.
 cover: /blog/schwarzschild-lab/obs-critical-curve-1.webp
+banner: /blog/schwarzschild-lab/lensed-sky.webp
 ---
 
 This is the research side of [Building a Black Hole Simulator](/blog/building-a-black-hole-simulator/): what I investigated, in order, and why. The concrete numbers are in the [findings log](/blog/schwarzschild-lab-findings/). The full version, with every formula and reference, lives in the repository as [`docs/research-log.md`](https://github.com/ZahinTapadar/schwarzschild-lab/blob/main/docs/research-log.md).

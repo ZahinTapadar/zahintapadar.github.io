@@ -7,6 +7,8 @@ project: https://zahintapadar.github.io/wortraum/
 repo: https://github.com/ZahinTapadar/wortraum/tree/lua-implementation
 description: A devlog on wortraum, an information-theoretic Wordle solver with a C core, driven from Lua through LuaJIT FFI and compiled to a 3 KB WebAssembly module for the browser.
 cover: /blog/wortraum/opening.webp
+banner_pos: center 85%
+banner_opacity: 0.5
 demo_cmd: ./wortraum
 demo_note: loads the C core as WebAssembly · tap tiles or type 0 / 1 / 2, then enter
 ---

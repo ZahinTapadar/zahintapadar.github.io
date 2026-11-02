@@ -568,3 +568,96 @@
     display: none;
   }
 }
+
+/* Poster banner: the post's cover bleeds across the top of the page behind
+   the header and title, then fades into the black page */
+.blog {
+  overflow-x: clip;
+}
+
+.post-hero-art {
+  --hero-h: min(70vh, 600px);
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  width: min(100vw, 1600px);
+  height: var(--hero-h);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: post-hero-in 0.8s ease-out both;
+}
+
+.post-hero-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  opacity: 0.8;
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.75) 45%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.75) 45%, transparent 100%),
+    linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Shade the top so the header stays readable over bright images */
+.post-hero-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, transparent 24%);
+}
+
+@keyframes post-hero-in {
+  from { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-hero-art { animation: none; }
+}
+
+.blog .minimal-header,
+.post {
+  position: relative;
+  z-index: 1;
+}
+
+/* The title sits low on the banner, like a poster's billing block */
+.post.has-hero .post-hero {
+  min-height: calc(min(70vh, 600px) - 9rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.9);
+}
+
+.post.has-hero .post-hero .blog-back {
+  margin-bottom: auto;
+}
+
+.post.has-hero .blog-title {
+  font-size: clamp(2rem, 5.5vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.6rem;
+}
+
+.post.has-hero .post-subtitle {
+  color: var(--fg-2);
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .post-hero-art { --hero-h: 48vh; opacity: 0.6; }
+  .post.has-hero .post-hero { min-height: calc(48vh - 7rem); }
+  .post-hero-art img {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.7) 45%, transparent 100%);
+  }
+}
