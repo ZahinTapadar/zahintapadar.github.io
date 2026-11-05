@@ -34,6 +34,7 @@ const featured: Work[] = [
 ];
 
 const archive: Work[] = [
+    { id: 12, title: 'LoveBites for macOS (dotfiles)', year: '2026', link: 'https://github.com/ZahinTapadar/lovebites-macos' },
     { id: 7, title: 'ADB App Manager', year: '2026', link: 'https://github.com/ZahinTapadar/adb-app-manager' },
     { id: 8, title: 'Razer Mouse Manager for macOS', year: '2026', link: 'https://github.com/ZahinTapadar/DeathAdder-V2-X-Hyperspeed-macos' },
     { id: 1, title: 'BeautifyOllama', year: '2025', link: 'https://beautifyollama.vercel.app/' },
